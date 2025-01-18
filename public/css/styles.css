@@ -4,3 +4,114 @@
 *:after {
   box-sizing: border-box;
 }
+body{
+  background-image: url(../images/site/checkerboard.jpg);
+  z-index: -3;
+}
+h3{
+  font-size: larger;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px;
+  padding: 10px;
+  font-weight: bold;
+}
+
+header a {
+  text-decoration: none;
+  color: rgb(39, 36, 36);
+}
+
+nav {
+  background-color: rgb(39, 36, 36);
+  color: white;
+}
+
+nav ul {
+  display: flex;
+  justify-content: space-around;
+  padding: 0;
+  margin: 0;
+  
+}
+nav ul li{
+  list-style: none;
+  font-size: 1.5rem;
+}
+
+.siteName{
+  font-size: 2rem;
+}
+#wrapper{
+  background-color: white;
+  border: 5px solid skyblue;
+  border-radius: 5px;
+  padding: 10px;
+  width: 85%;
+  margin: 0 auto;
+}
+.welcome{
+  text-align: center;
+  position: relative;
+}
+.welcome img{
+  width: 70%;
+  margin: 0 auto;
+}
+.box{
+  position: absolute;
+  font-size: 1.5rem;
+  padding: 10px;
+  color: rgb(18, 150, 179);
+  background-color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 20px;
+  width: 25%;
+  left: 10px;
+  top: 10px;
+}
+.container{
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+}
+.upgrades{
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  text-align: center;
+}
+.upgrades figure{
+  background-color: skyblue;
+  padding: 10px;
+  width: 80%;
+  height: 70%;
+  border: 1px solid black;
+}
+.reviews,.upgrades{
+  width: 45%;
+  font-size: 1.5rem;
+}
+
+@media (max-width: 1000px) {
+  .box {
+      width: 40%; 
+      padding: 8px; 
+      font-size: 1rem;
+  }
+
+  .container{
+    flex-direction: column-reverse;
+    width: 80%;
+  }
+  .upgrades,
+  .reviews{
+    width: 90%;
+  }
+}
+
+@media (max-width: 600px){
+  figure img{
+    width: 50%;
+  }
+}
