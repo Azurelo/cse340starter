@@ -25,8 +25,9 @@ header a {
 }
 
 nav {
-  background-color: rgb(39, 36, 36);
+  background-color: rgb(39, 37, 37);
   color: white;
+  padding: 10px;
 }
 
 nav ul {
@@ -40,10 +41,19 @@ nav ul li{
   list-style: none;
   font-size: 1.5rem;
 }
+nav a{
+  text-decoration: none;
+  color: white;
+}
 
 .siteName{
   font-size: 2rem;
 }
+
+#tools{
+  font-size: larger;
+}
+
 #wrapper{
   background-color: white;
   border: 5px solid skyblue;
@@ -92,6 +102,81 @@ nav ul li{
   width: 45%;
   font-size: 1.5rem;
 }
+
+/* Style the unordered list */
+#inv-display {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+  gap: 20px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Style each card */
+#inv-display li {
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+}
+
+/* Hover effect */
+#inv-display li:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Image styling */
+#inv-display li img {
+  width: 50%;
+  object-fit: cover;
+  border-bottom: 3px solid #333;
+}
+
+/* Name and Price container */
+.namePrice {
+  padding: 15px;
+}
+
+/* Styling for the title */
+.namePrice h2 {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
+.namePrice a {
+  text-decoration: none;
+  color: #222;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.namePrice a:hover {
+  color: #d9534f;
+}
+
+/* Price styling */
+.namePrice span {
+  display: block;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #27ae60;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  #inv-display {
+      grid-template-columns: 1fr;
+  }
+
+  #inv-display li img {
+      height: 160px;
+  }
+}
+
 
 @media (max-width: 1000px) {
   .box {
