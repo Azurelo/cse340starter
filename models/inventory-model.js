@@ -21,8 +21,23 @@ async function getInventoryByClassificationId(classification_id) {
     )
     return data.rows
   } catch (error) {
-    console.error("getclassificationsbyid error " + error)
+    console.error("Error in getInventoryByClassificationId: " + error.message)
+    throw error
   }
 }
 
-module.exports = {getClassifications, getInventoryByClassificationId};
+/* ***************************
+ *  Get vehicle details by inv_id
+ * ************************** */
+async function getVehicleById(inv_id) {
+  try {
+    const sql = `SELECT * FROM public.inventory WHERE inv_id = $1`;
+    const data = await pool.query(sql, [inv_id]);
+    return data.rows.length ? data.rows[0] : null;
+  } catch (error) {
+    console.error(`Error in getVehicleById for inv_id ${inv_id}: ` + error.message);
+    throw new Error("Database error retrieving vehicle.");
+  }
+}
+
+module.exports = { getClassifications, getInventoryByClassificationId, getVehicleById };

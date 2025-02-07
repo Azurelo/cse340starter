@@ -56,6 +56,37 @@ Util.buildClassificationGrid = async function(data){
       grid += '<p class="notice">Sorry, no matching vehicles could be found.</p>'
     }
     return grid
-  }
+}
 
-module.exports = Util
+/* *************************************
+ * Build vehicle detail HTML
+ ***************************** */
+Util.buildVehicleDetailHTML = function(vehicle) {
+  // Check if price and mileage are valid numbers before using toLocaleString
+  const price = vehicle.inv_price 
+  ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(vehicle.inv_price) 
+  : 'N/A';
+  const mileage = vehicle.inv_miles ? vehicle.inv_miles.toLocaleString() : 'N/A';
+  const description = vehicle.inv_description || 'No description available';
+
+  return `
+    <div class="vehicle-detail">
+      <div class="vehicle-detail-wrapper">
+      <div class="vehicle-img">
+          <h1>${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}</h1>
+          <img src="${vehicle.inv_image}" alt="${vehicle.inv_make} ${vehicle.inv_model}">
+      </div>  
+      <div class="vehicle-info">
+          <p><strong>Price:</strong> ${price}</p>
+          <p><strong>Mileage:</strong> ${mileage} miles</p>
+          <p><strong>Description:</strong> ${description}</p>
+        </div>
+      </div>
+    </div>
+  `;
+};
+
+
+
+// Export the Util object with all its methods
+module.exports = Util;

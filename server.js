@@ -12,13 +12,15 @@ const app = express()
 const static = require("./routes/static")
 const baseController = require("./controllers/baseController")
 const inventoryRoute = require('./routes/inventoryRoute'); 
-
+const errorRoutes = require("./routes/errorRoutes");
+const utilities = require('./utilities');
 /* ***********************
  * View Engine Templates
  *************************/
 app.set("view engine", "ejs")
 app.use(expressLayouts)
 app.set("layout", "./layouts/layout") // not at views root
+
 
 
 /* ***********************
@@ -29,7 +31,30 @@ app.use(static)
 app.get('/', baseController.buildHome)
 // Inventory routes
 app.use("/inv", inventoryRoute)
+app.use(errorRoutes);
 
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).render('errors/500', { title: "Server Error" });
+});
+
+app.use((req, res) => {
+  utilities.getNav()  
+    .then(nav => {
+      res.status(404).render('errors/404', { 
+        title: "Page Not Found",
+        nav 
+      });
+    })
+    .catch(error => {
+      console.error("Error fetching nav:", error);
+      res.status(404).render('errors/404', {
+        title: "Page Not Found",
+        nav: "" 
+      });
+    });
+});
 /* ***********************
  * Local Server Information
  * Values from .env (environment) file
