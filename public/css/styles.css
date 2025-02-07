@@ -227,7 +227,7 @@ nav a{
 /* Media query for small screens (below 768px) */
 @media (max-width: 768px) {
   .vehicle-detail {
-    flex-direction: row; /
+    flex-direction: row; 
   }
 
   .vehicle-detail-wrapper {
