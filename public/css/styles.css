@@ -200,15 +200,46 @@ nav a{
   color: #0056b3;
 }
 
-/* Flexbox layout for large screens */
-/* .vehicle-detail-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 30px;
-  justify-content: center; 
-  align-items: center;
+/* Login Container */
+ form {
+  width: 60%;
+  margin: 50px auto;
+  padding: 15px;
+  background: white;
+  border: 2px solid skyblue;
+  text-align: center;
+}
+
+/* Input Fields */
+form input {
   width: 100%;
-} */
+  padding: 8px;
+  margin: 5px 0;
+  border: 1px solid skyblue;
+}
+
+/* Button Styling */
+form button {
+  width: 100%;
+  padding: 10px;
+  background: skyblue;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+form button:hover {
+  background: rgb(18, 150, 179);
+}
+
+/* Link Styling */
+form a {
+  display: block;
+  margin-top: 10px;
+  text-decoration: none;
+  color: rgb(39, 36, 36);
+}
+
 
 .vehicle-detail-wrapper{
   display: grid;
