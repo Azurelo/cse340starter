@@ -1,12 +1,3 @@
-<!-- Display Flash Messages -->
-<% if (messages.notice) { %>
-  <% messages.notice.forEach(function(message) { %>
-    <div class="alert alert-info">
-      <%= message %>
-    </div>
-  <% }) %>
-<% } %>
-
 <form action="/account/register" method="POST">
   <label for="firstName">First Name:</label>
   <input type="text" id="firstName" name="account_firstname" required>

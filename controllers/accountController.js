@@ -6,9 +6,14 @@ const accountModel = require("../models/account-model");
 async function buildLogin(req, res, next) {
   try {
     let nav = await utilities.getNav();
+    let notice = req.flash("notice"); // Retrieve the flash message
+
+    console.log("Flash messages on login page:", notice); // Debugging
+
     res.render("account/login", {
       title: "Login",
       nav,
+      notice, // Pass to EJS
     });
   } catch (error) {
     next(error);
@@ -35,32 +40,30 @@ async function buildRegister(req, res, next) {
 *  Process Registration
 * *************************************** */
 async function registerAccount(req, res) {
-  try {
-    let nav = await utilities.getNav();
-    const { account_firstname, account_lastname, account_email, account_password } = req.body;
+  let nav = await utilities.getNav();
+  const { account_firstname, account_lastname, account_email, account_password } = req.body;
 
-    const regResult = await accountModel.registerAccount(
-      account_firstname,
-      account_lastname,
-      account_email,
-      account_password
+  const regResult = await accountModel.registerAccount(
+    account_firstname,
+    account_lastname,
+    account_email,
+    account_password
+  );
+
+  if (regResult) {
+    req.flash(
+      "notice",
+      `Congratulations, you're registered ${account_firstname}. Please log in.`
     );
+    console.log("Flash message set:", req.flash("notice")); // Debugging
 
-    if (regResult) {
-      req.flash("notice", `Congratulations, you're registered ${account_firstname}. Please log in.`);
-      return res.redirect("/account/login"); // Use redirect instead of render
-    } else {
-      req.flash("notice", "Sorry, the registration failed.");
-      return res.status(400).render("account/register", {
-        title: "Register",
-        nav,
-        messages: req.flash(), // Ensure flash messages are available
-      });
-    }
-  } catch (error) {
-    console.error("Error in registerAccount:", error);
-    req.flash("notice", "An unexpected error occurred. Please try again.");
-    res.status(500).redirect("/account/register");
+    res.redirect("/account/login"); // Redirect instead of render
+  } else {
+    req.flash("notice", "Sorry, the registration failed.");
+    res.status(501).render("account/register", {
+      title: "Registration",
+      nav,
+    });
   }
 }
 

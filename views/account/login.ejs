@@ -1,8 +1,9 @@
 <h1><%= title %></h1>
 
-<% if (messages.error) { %>
-  <p class="error"><%= messages.error %></p>
+<% if (notice && notice.length) { %>
+  <div class="alert alert-success"><%= notice[0] %></div>
 <% } %>
+
 
 <form action="/account/login" method="POST">
   <label for="account_email">Email:</label>
