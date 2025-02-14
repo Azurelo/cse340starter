@@ -6,6 +6,7 @@
  * Require Statements
  *************************/
 const session = require("express-session")
+const bodyParser = require("body-parser");
 const pool = require('./database/')
 const express = require("express")
 const expressLayouts = require("express-ejs-layouts")
@@ -18,9 +19,11 @@ const errorRoutes = require("./routes/errorRoutes");
 const accountRoute = require("./routes/accountRoutes");
 const utilities = require('./utilities');
 
+
 /* ***********************
  * Middleware
  * ************************/
+
 app.use(session({
   store: new (require('connect-pg-simple')(session))({
     createTableIfMissing: true,
@@ -37,6 +40,8 @@ app.use(function(req, res, next){
   res.locals.messages = require('express-messages')(req, res)
   next()
 })
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 /* ***********************
  * View Engine Templates
  *************************/

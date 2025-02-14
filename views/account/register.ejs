@@ -1,0 +1,34 @@
+<!-- Display Flash Messages -->
+<% if (messages.notice) { %>
+  <% messages.notice.forEach(function(message) { %>
+    <div class="alert alert-info">
+      <%= message %>
+    </div>
+  <% }) %>
+<% } %>
+
+<form action="/account/register" method="POST">
+  <label for="firstName">First Name:</label>
+  <input type="text" id="firstName" name="account_firstname" required>
+
+  <label for="lastName">Last Name:</label>
+  <input type="text" id="lastName" name="account_lastname" required>
+
+  <label for="email">Email:</label>
+  <input type="email" id="email" name="account_email" required>
+
+  <label for="password">Password:</label>
+  <input type="password" id="password" name="account_password" required>
+  
+  <!-- Password requirements section -->
+  <div class="password-requirements">
+    <ul>
+      <li>At least 12 characters long</li>
+      <li>At least 1 uppercase letter</li>
+      <li>At least 1 number</li>
+      <li>At least 1 special character (e.g., @, #, $, %, etc.)</li>
+    </ul>
+  </div>
+
+  <button type="submit">Register</button>
+</form>

@@ -207,7 +207,7 @@ nav a{
   padding: 15px;
   background: white;
   border: 2px solid skyblue;
-  text-align: center;
+  text-align: left;
 }
 
 /* Input Fields */
@@ -239,7 +239,13 @@ form a {
   text-decoration: none;
   color: rgb(39, 36, 36);
 }
-
+form li{
+  list-style: none;
+  text-align: left;
+}
+.password-requirements ul{ 
+  padding: 0px;
+}
 
 .vehicle-detail-wrapper{
   display: grid;
