@@ -261,6 +261,13 @@ form li{
   margin-top: 120px;
 }
 
+input:required:invalid, input:focus:invalid {
+  border-color: red;
+ }
+
+input:required:valid {
+  border-color: greenyellow;
+}
 /* Media query for small screens (below 768px) */
 @media (max-width: 768px) {
   .vehicle-detail {

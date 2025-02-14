@@ -8,12 +8,11 @@ async function buildLogin(req, res, next) {
     let nav = await utilities.getNav();
     let notice = req.flash("notice"); // Retrieve the flash message
 
-    console.log("Flash messages on login page:", notice); // Debugging
-
     res.render("account/login", {
       title: "Login",
       nav,
-      notice, // Pass to EJS
+      notice,
+      errors: null, 
     });
   } catch (error) {
     next(error);
@@ -29,6 +28,7 @@ async function buildRegister(req, res, next) {
     res.render("account/register", {
       title: "Register",
       nav,
+      errors: null,
     });
   } catch (error) {
     console.error("Error in buildRegister:", error);
@@ -63,6 +63,7 @@ async function registerAccount(req, res) {
     res.status(501).render("account/register", {
       title: "Registration",
       nav,
+      errors: null,
     });
   }
 }

@@ -10,8 +10,15 @@
   <input type="email" name="account_email" id="account_email" required>
 
   <label for="account_password">Password:</label>
-  <input type="password" name="account_password" id="account_password" required>
-
+  <input type="password" name="account_password" id="account_password" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$">
+  <div class="password-requirements">
+    <ul>
+      <li>At least 12 characters long</li>
+      <li>At least 1 uppercase letter</li>
+      <li>At least 1 number</li>
+      <li>At least 1 special character (e.g., @, #, $, %, etc.)</li>
+    </ul>
+  </div>
   <button type="submit">Login</button>
 </form>
 
