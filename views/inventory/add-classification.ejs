@@ -1,6 +1,12 @@
 <form action="/inv/add-classification" method="POST" id="addClassificationForm">
   <label for="classificationName">New Classification Name</label>
   <input type="text" id="classificationName" name="classificationName" required>
+  
+  <!-- Display error message here -->
+  <% if (error) { %>
+    <div class="error-message"><%= error %></div>
+  <% } %>
+  
   <button type="submit">Add Classification</button>
 </form>
 
@@ -11,8 +17,8 @@ document.getElementById('addClassificationForm').addEventListener('submit', func
   const errorMessage = document.getElementById('error-message');
   
   if (!regex.test(classificationName)) {
-    errorMessage.textContent = 'Classification name cannot contain spaces or special characters.';
     event.preventDefault(); 
+    alert('Classification name cannot contain spaces or special characters.');
   }
 });
 </script>

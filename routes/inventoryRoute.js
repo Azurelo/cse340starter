@@ -15,6 +15,8 @@ router.get("/", invController.invCont.buildManagementView);
 router.get('/add-classification', invController.invCont.buildAddClassificationView);
 
 // Route to handle the Add Classification form submission
-router.post('/add-classification', invController.invCont.validateClassification, invController.invCont.addClassification); // Added validation middleware
+// Route to handle the Add Classification form submission
+router.post('/add-classification', invController.invCont.validateClassification, invController.invCont.addClassification);
+
 
 module.exports = router;

@@ -54,7 +54,7 @@ invCont.getVehicleDetail = async function (req, res, next) {
  * ************************** */
 invCont.buildManagementView = async function (req, res, next) {
   try {
-    let nav = await utilities.getNav(); // 
+    let nav = await utilities.getNav(); 
     const flashMessage = req.flash("message") || null; 
 
     res.render("./inventory/management", {
@@ -110,21 +110,24 @@ invCont.addClassification = async function (req, res, next) {
   try {
     // Insert new classification into the database
     const result = await invModel.addClassification(classificationName);
-
-    // On success, show success message and navigate to management page
+    
+    // On success, show success message and render management page
     req.flash('message', 'New classification added successfully!');
 
+    // Dynamically update the navigation
     let nav = await utilities.getNav();
-    res.render('./inventory/add-classification', { 
-      title: "Add Classification",
+    res.render('./inventory/management', {
+      title: "Inventory Management",
       nav,  
+      message: req.flash('message'), 
     });
   } catch (error) {
     req.flash('error', 'Failed to add classification. Please try again.');
     let nav = await utilities.getNav();
-    res.render('./inventory/add-classification', { 
+    res.render('./inventory/add-classification', {
       title: "Add Classification",
-      nav,  
+      nav,
+      error: 'Failed to add classification. Please try again.'  
     });
   }
 };
