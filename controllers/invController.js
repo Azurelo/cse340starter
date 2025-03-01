@@ -154,14 +154,46 @@ invCont.buildAddInventoryView = async function(req, res) {
 
 
 // Validate inventory input
+// Validate inventory input
 invCont.validateInventory = async function(req, res, next) {
   const { inv_make, inv_model, inv_price, inv_year, inv_miles, inv_color } = req.body;
+  
+  // Check for missing fields
   if (!inv_make || !inv_model || !inv_price || !inv_year || !inv_miles || !inv_color) {
     req.flash("message", "All fields are required.");
     return res.redirect("/inv/add-inventory");
   }
+  
+  // Validate price (must be a positive number)
+  if (isNaN(inv_price) || inv_price <= 0) {
+    req.flash("message", "Price must be a valid positive number.");
+    return res.redirect("/inv/add-inventory");
+  }
+  
+  // Validate year (must be a 4-digit number between 1900 and current year)
+  const currentYear = new Date().getFullYear();
+  if (!/^\d{4}$/.test(inv_year) || inv_year < 1900 || inv_year > currentYear) {
+    req.flash("message", "Please enter a valid 4-digit year.");
+    return res.redirect("/inv/add-inventory");
+  }
+  
+  // Validate miles (must be a positive number)
+  if (isNaN(inv_miles) || inv_miles < 0) {
+    req.flash("message", "Miles must be a valid non-negative number.");
+    return res.redirect("/inv/add-inventory");
+  }
+  
+  // Validate color (optional, but can be checked for alphanumeric or specific format if needed)
+  const regex = /^[A-Za-z0-9\s]+$/; // Change this regex as per your color naming rules
+  if (!regex.test(inv_color)) {
+    req.flash("message", "Color can only contain letters, numbers, and spaces.");
+    return res.redirect("/inv/add-inventory");
+  }
+
+  // All validations passed, proceed to next middleware
   next();
 };
+
 
 // Handle form submission
 invCont.addInventory = async function(req, res) {
