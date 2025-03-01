@@ -151,9 +151,6 @@ invCont.buildAddInventoryView = async function(req, res) {
   }
 };
 
-
-
-// Validate inventory input
 // Validate inventory input
 invCont.validateInventory = async function(req, res, next) {
   const { inv_make, inv_model, inv_price, inv_year, inv_miles, inv_color } = req.body;
@@ -183,8 +180,8 @@ invCont.validateInventory = async function(req, res, next) {
     return res.redirect("/inv/add-inventory");
   }
   
-  // Validate color (optional, but can be checked for alphanumeric or specific format if needed)
-  const regex = /^[A-Za-z0-9\s]+$/; // Change this regex as per your color naming rules
+  // Validate color 
+  const regex = /^[A-Za-z0-9\s]+$/; 
   if (!regex.test(inv_color)) {
     req.flash("message", "Color can only contain letters, numbers, and spaces.");
     return res.redirect("/inv/add-inventory");
