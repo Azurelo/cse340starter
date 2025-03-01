@@ -92,7 +92,7 @@ invCont.validateClassification = async (req, res, next) => {
 
     if (!regex.test(classificationName)) {
       req.flash('error', 'Classification name cannot contain spaces or special characters.');
-      return res.redirect('/inventory/add-classification'); 
+      return res.redirect('/inv/add-classification'); 
     }
 
     next(); 
@@ -124,7 +124,7 @@ invCont.addClassification = async function (req, res, next) {
   } catch (error) {
     req.flash('error', 'Failed to add classification. Please try again.');
     let nav = await utilities.getNav();
-    res.render('./inventory/add-classification', {
+    res.render('./inv/add-classification', {
       title: "Add Classification",
       nav,
       error: 'Failed to add classification. Please try again.'  
