@@ -57,7 +57,22 @@ Util.buildClassificationGrid = async function(data){
     }
     return grid
 }
+Util.buildClassificationList = async function(selectedId = null) {
+  let data = await invModel.getClassifications();
+  let classificationList = '<select name="classification_id" id="classificationList" required>';
+  classificationList += "<option value=''>Choose a Classification</option>";
 
+  data.rows.forEach((row) => {
+    classificationList += `<option value="${row.classification_id}"`;
+    if (selectedId != null && row.classification_id == selectedId) {
+      classificationList += " selected ";
+    }
+    classificationList += `>${row.classification_name}</option>`;
+  });
+
+  classificationList += "</select>";
+  return classificationList;
+};
 /* *************************************
  * Build vehicle detail HTML
  ***************************** */
