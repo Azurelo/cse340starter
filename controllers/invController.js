@@ -158,7 +158,7 @@ invCont.validateInventory = async function(req, res, next) {
   const { inv_make, inv_model, inv_price, inv_year, inv_miles, inv_color } = req.body;
   if (!inv_make || !inv_model || !inv_price || !inv_year || !inv_miles || !inv_color) {
     req.flash("message", "All fields are required.");
-    return res.redirect("/inventory/add-inventory");
+    return res.redirect("/inv/add-inventory");
   }
   next();
 };
@@ -183,15 +183,15 @@ invCont.addInventory = async function(req, res) {
 
     if (result) {
       req.flash("message", "Vehicle added successfully!");
-      res.redirect("/inventory/");
+      res.redirect("/inv/");
     } else {
       req.flash("message", "Failed to add vehicle. Try again.");
-      res.redirect("/inventory/add-inventory");
+      res.redirect("/inv/add-inventory");
     }
   } catch (error) {
     console.error("Error adding inventory:", error);
     req.flash("message", "Error processing request.");
-    res.redirect("/inventory/add-inventory");
+    res.redirect("/inv/add-inventory");
   }
 };
 

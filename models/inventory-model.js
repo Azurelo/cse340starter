@@ -57,10 +57,12 @@ async function addClassification(classificationName) {
 }
 async function addVehicle(vehicleData) {
   try {
+    console.log(vehicleData);
     const sql = `
       INSERT INTO inventory (classification_id, inv_make, inv_model, inv_description, inv_image, inv_thumbnail, inv_price, inv_year, inv_miles, inv_color)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-      
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+      RETURNING *`; 
+    
     const values = [
       vehicleData.classification_id,
       vehicleData.inv_make,
@@ -74,12 +76,15 @@ async function addVehicle(vehicleData) {
       vehicleData.inv_color
     ];
 
-    const [result] = await pool.execute(sql, values);
-    return result.affectedRows > 0;
+    const result = await pool.query(sql, values);
+    
+    
+    return result.rows.length > 0; 
   } catch (error) {
     console.error("Error inserting vehicle into inventory:", error);
     return false;
   }
-};
+}
+
 
 module.exports = { addVehicle, getClassifications, getInventoryByClassificationId, getVehicleById, addClassification };

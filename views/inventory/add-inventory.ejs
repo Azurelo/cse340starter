@@ -4,7 +4,7 @@
     <select name="classification_id" id="classificationList" required>
       <option value="">Choose a Classification</option>
       <% classificationList.forEach(function(classification) { %>
-        <option value="<%= classification.id %>"><%= classification.classification_name %></option>
+        <option value="<%= classification.classification_id %>"><%= classification.classification_name %></option>
       <% }); %>
     </select>
   
