@@ -137,11 +137,12 @@ invCont.addClassification = async function (req, res, next) {
 invCont.buildAddInventoryView = async function(req, res) {
   try {
     const classificationList = await utilities.buildClassificationList();
-    let nav = await utilities.getNav(); // Ensure this line is here to define 'nav'
+    console.log(classificationList);  
+    let nav = await utilities.getNav(); 
     res.render("inventory/add-inventory", {
       title: "Add Inventory",
-      nav, // Now 'nav' is defined
-      classificationList,
+      nav,
+      classificationList,  
       message: req.flash("message"),
     });
   } catch (error) {
@@ -151,8 +152,9 @@ invCont.buildAddInventoryView = async function(req, res) {
 };
 
 
+
 // Validate inventory input
-invCont.validateInventory = async function(req, res) {
+invCont.validateInventory = async function(req, res, next) {
   const { inv_make, inv_model, inv_price, inv_year, inv_miles, inv_color } = req.body;
   if (!inv_make || !inv_model || !inv_price || !inv_year || !inv_miles || !inv_color) {
     req.flash("message", "All fields are required.");

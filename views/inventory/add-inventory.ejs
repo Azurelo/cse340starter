@@ -1,8 +1,13 @@
 <h1>Add New Vehicle</h1>
-<form action="/inv/add-inventory" method="POST">
+<form class="add-inventory" action="/inv/add-inventory" method="POST">
     <label for="classificationList">Classification:</label>
- <!--    <%= classificationList %>
-   -->
+    <select name="classification_id" id="classificationList" required>
+      <option value="">Choose a Classification</option>
+      <% classificationList.forEach(function(classification) { %>
+        <option value="<%= classification.id %>"><%= classification.classification_name %></option>
+      <% }); %>
+    </select>
+  
     <label for="inv_make">Make:</label>
     <input type="text" id="inv_make" name="inv_make" required >
   
