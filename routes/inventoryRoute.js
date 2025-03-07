@@ -1,7 +1,7 @@
 const express = require("express");
 const router = new express.Router();
 const invCont = require("../controllers/invController");
-
+const utilities = require('../utilities/account-validation')
 // Route to build inventory by classification view
 router.get("/type/:classificationId", invCont.buildByClassificationId); 
 
@@ -18,6 +18,6 @@ router.get('/add-classification', invCont.buildAddClassificationView);
 router.post('/add-classification', invCont.validateClassification, invCont.addClassification);
 
 router.get("/add-inventory", invCont.buildAddInventoryView);
-
+router.get("/getInventory/:classification_id", utilities.handleErrors(invCont.getInventoryJSON))
 router.post("/add-inventory", invCont.validateInventory, invCont.addInventory);
 module.exports = router;

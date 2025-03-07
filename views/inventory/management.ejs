@@ -6,3 +6,24 @@
   <li><a href="/inv/add-classification">Add New Classification</a></li>
   <li><a href="/inv/add-inventory">Add New Inventory Item</a></li>
 </ul>
+
+<h2>Manage Inventory</h2>
+<p>Select a classification from the list to see the items belonging to the classification</p>
+
+<form method="GET" action="/inv/management">
+  <label for="classificationSelect">Select Classification:</label>
+  <select name="classification_id" id="classificationSelect" required>
+    <option value="">Choose a Classification</option>
+    <% classificationSelect.forEach(function(classification) { %>
+      <option value="<%= classification.classification_id %>">
+        <%= classification.classification_name %>
+      </option>
+    <% }); %>
+  </select>
+  <!-- <button type="submit">Show Inventory</button> -->
+</form>
+
+<table id="inventoryDisplay"></table>
+
+<noscript>JavaScript must be enabled to use this page.</noscript>
+<script src="../../js/inventory.js"></script>
