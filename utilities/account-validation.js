@@ -69,4 +69,42 @@ validate.checkRegData = async (req, res, next) => {
     next()
   }
   
+
+  validate.checkLoginData = async (req, res, next) => {
+    const { account_email } = req.body;
+    let errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        let nav = await utilities.getNav();
+        res.render("account/login", {
+            errors,
+            title: "Login",
+            nav,
+            account_email,
+        });
+        return;
+    }
+    next();
+};
+
+// Validation rules for login
+validate.loginRules = () => {
+    return [
+        body("account_email").isEmail().withMessage("Enter a valid email address"),
+        body("account_password")
+            .isLength({ min: 6 })
+            .withMessage("Password must be at least 6 characters long"),
+    ];
+};
+
+validate.handleErrors = (controllerFunction) => {
+  return async (req, res, next) => {
+      try {
+          await controllerFunction(req, res, next);
+      } catch (error) {
+          console.error("Error in controller function:", error);
+          res.status(500).render("error", { message: "Something went wrong!" });
+      }
+  };
+};
 module.exports = validate

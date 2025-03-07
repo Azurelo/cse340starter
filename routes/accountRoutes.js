@@ -2,7 +2,7 @@ const express = require("express");
 const router = new express.Router();
 const accountController = require("../controllers/accountController");
 const regValidate = require('../utilities/account-validation')
-
+const Util = require('../utilities/index')
 // Route to display login view
 router.get("/login", accountController.buildLogin);
 router.get("/register", accountController.buildRegister);
@@ -13,10 +13,12 @@ router.post(
   accountController.registerAccount
 )
 
-// Error handler middleware
-router.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send("Something went wrong!");
-});
-
+// Process the login request
+router.post(
+  "/login",
+  regValidate.loginRules(),
+  regValidate.checkLoginData,
+  regValidate.handleErrors(accountController.accountLogin)
+)
+router.get("/account", Util.checkJWTToken, accountController.buildAccountManagement);
 module.exports = router;

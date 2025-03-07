@@ -14,7 +14,7 @@ const expressLayouts = require("express-ejs-layouts");
 const env = require("dotenv").config();
 const flash = require("connect-flash");
 const PgSession = require("connect-pg-simple")(session);
-
+const cookieParser = require("cookie-parser")
 const app = express();
 const staticRoutes = require("./routes/static");
 const baseController = require("./controllers/baseController");
@@ -61,14 +61,14 @@ app.use((req, res, next) => {
 // Body parser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use(cookieParser())
 /* ***********************
  * View Engine Templates
  *************************/
 app.set("view engine", "ejs");
 app.use(expressLayouts);
 app.set("layout", "./layouts/layout"); // Not at views root
-
+app.use(utilities.checkJWTToken)
 /* ***********************
  * Routes
  *************************/

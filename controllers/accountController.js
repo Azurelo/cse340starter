@@ -1,5 +1,9 @@
 const utilities = require("../utilities");
 const accountModel = require("../models/account-model");
+const jwt = require("jsonwebtoken")
+require("dotenv").config()
+const bcrypt = require('bcryptjs');
+
 /* ****************************************
  *  Deliver login view
  * *************************************** */
@@ -43,11 +47,18 @@ async function registerAccount(req, res) {
   let nav = await utilities.getNav();
   const { account_firstname, account_lastname, account_email, account_password } = req.body;
 
+  // Hash the password before saving it
+  const hashedPassword = await bcrypt.hash(account_password, 10);  // 10 is the salt rounds
+
+  // Log the hashed password to check if it is being generated correctly
+  console.log("Hashed Password:", hashedPassword);
+
+  // Pass the hashed password to the model for registration
   const regResult = await accountModel.registerAccount(
     account_firstname,
     account_lastname,
     account_email,
-    account_password
+    hashedPassword  
   );
 
   if (regResult) {
@@ -70,6 +81,60 @@ async function registerAccount(req, res) {
 
 
 
-module.exports = { buildLogin, buildRegister, registerAccount };
+/* ****************************************
+ *  Process login request
+ * ************************************ */
+async function accountLogin(req, res) {
+  const { account_email, account_password } = req.body;
+
+  // Fetch the account data from the database using the email
+  const accountData = await accountModel.getAccountByEmail(account_email);
+
+  // Check if account data exists
+  if (accountData) {
+    // Log the hashed password from the database
+    console.log("Hashed Password from DB:", accountData.account_password);
+
+    // Compare the entered password with the hashed password
+    console.log('Entered Password:', account_password);
+    console.log('Stored Hashed Password:', accountData.account_password);
+    const isValidPassword = await bcrypt.compare(account_password, accountData.account_password);
+    console.log('Password valid:', isValidPassword);
+
+    // Log the result of the password comparison
+    console.log("Password valid:", isValidPassword);
+
+    if (isValidPassword) {
+      req.flash("notice", "Login successful!");
+      res.redirect("/dashboard"); // Redirect to a protected page
+    } else {
+      req.flash("notice", "Invalid login credentials.");
+      res.status(401).render("account/login", {
+        title: "Login",
+        errors: null,
+        nav
+      });
+    }
+  } else {
+    req.flash("notice", "Account not found.");
+    res.status(404).render("account/login", {
+      title: "Login",
+      errors: null,
+      nav
+    });
+  }
+}
+
+const buildAccountManagement = (req, res) => {
+  res.render("account/account-management", {
+      title: "Account Management",   // The title of the page
+      messages: req.flash(),
+      nav,         
+      loggedin: res.locals.loggedin || 0  // You can set this based on your authentication logic
+  });
+};
+
+
+module.exports = { accountLogin, buildAccountManagement,buildLogin, buildRegister, registerAccount };
 
 
