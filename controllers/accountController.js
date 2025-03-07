@@ -85,54 +85,68 @@ async function registerAccount(req, res) {
  *  Process login request
  * ************************************ */
 async function accountLogin(req, res) {
-  const { account_email, account_password } = req.body;
-
-  // Fetch the account data from the database using the email
-  const accountData = await accountModel.getAccountByEmail(account_email);
-
-  // Check if account data exists
-  if (accountData) {
-    // Log the hashed password from the database
-    console.log("Hashed Password from DB:", accountData.account_password);
-
-    // Compare the entered password with the hashed password
-    console.log('Entered Password:', account_password);
-    console.log('Stored Hashed Password:', accountData.account_password);
-    const isValidPassword = await bcrypt.compare(account_password, accountData.account_password);
-    console.log('Password valid:', isValidPassword);
-
-    // Log the result of the password comparison
-    console.log("Password valid:", isValidPassword);
-
-    if (isValidPassword) {
-      req.flash("notice", "Login successful!");
-      res.redirect("/dashboard"); // Redirect to a protected page
-    } else {
-      req.flash("notice", "Invalid login credentials.");
-      res.status(401).render("account/login", {
-        title: "Login",
-        errors: null,
-        nav
-      });
-    }
-  } else {
-    req.flash("notice", "Account not found.");
-    res.status(404).render("account/login", {
+  let nav = await utilities.getNav()
+  const { account_email, account_password } = req.body
+  const accountData = await accountModel.getAccountByEmail(account_email)
+  if (!accountData) {
+    req.flash("notice", "Please check your credentials and try again.")
+    res.status(400).render("account/login", {
       title: "Login",
+      nav,
       errors: null,
-      nav
-    });
+      account_email,
+    })
+    return
+  }
+  try {
+    if (await bcrypt.compare(account_password, accountData.account_password)) {
+      delete accountData.account_password
+      const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 })
+      if(process.env.NODE_ENV === 'development') {
+        res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 })
+      } else {
+        res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 })
+      }
+      return res.redirect("/account/")
+    }
+    else {
+      req.flash("message notice", "Please check your credentials and try again.")
+      res.status(400).render("account/login", {
+        title: "Login",
+        nav,
+        errors: null,
+        account_email,
+      })
+    }
+  } catch (error) {
+    throw new Error('Access Forbidden')
   }
 }
 
-const buildAccountManagement = (req, res) => {
-  res.render("account/account-management", {
-      title: "Account Management",   // The title of the page
-      messages: req.flash(),
-      nav,         
-      loggedin: res.locals.loggedin || 0  // You can set this based on your authentication logic
-  });
-};
+async function buildAccountManagement(req, res, next) {
+  try {
+    let nav = await utilities.getNav();
+    console.log('Nav fetched:', nav);  // Log nav to check its value
+
+    if (!nav) {
+      throw new Error("Navigation data is empty or undefined");
+    }
+
+    // Pass nav explicitly to the template
+    res.render("account/account-management", {
+      title: "Account Management",
+      nav, 
+      errors: null,
+    });
+  } catch (error) {
+    console.error("Error in buildAccountManagement:", error);
+    next(error);
+  }
+}
+
+
+
+
 
 
 module.exports = { accountLogin, buildAccountManagement,buildLogin, buildRegister, registerAccount };

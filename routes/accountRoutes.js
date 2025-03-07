@@ -20,5 +20,6 @@ router.post(
   regValidate.checkLoginData,
   regValidate.handleErrors(accountController.accountLogin)
 )
-router.get("/account", Util.checkJWTToken, accountController.buildAccountManagement);
+
+router.get("/", Util.checkJWTToken, Util.checkLogin, regValidate.handleErrors(accountController.buildAccountManagement));
 module.exports = router;
