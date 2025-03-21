@@ -29,5 +29,13 @@ router.get('/account/update:id', regValidate.handleErrors(accountController.buil
 
 // Route to handle the update form submission
 router.post('/account/update', regValidate.handleErrors(accountController.updateAccount)); 
+// In your accounts router file
+router.get('/account/update', (req, res) => {
+    if (!req.user) { // If the user is not logged in
+        return res.redirect('/login');
+    }
+    // Render account management page, pass user data
+    res.render('account/account-management', { user: req.user });
+});
 
 module.exports = router;
