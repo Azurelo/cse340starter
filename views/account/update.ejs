@@ -8,20 +8,21 @@
   <div class="success"><%= success %></div>
 <% } %>
 
-<form action="/account/update/<%= accountData.id %>" method="POST">
+<!-- Example form to update account information -->
+<form action="/account/update" method="POST">
   <label for="firstName">First Name:</label>
-  <input type="text" id="firstName" name="firstName" value="<%= accountData.firstName %>" required>
+  <input type="hidden" name="account_id" value="<%= accountData.account_id %>">
+  <input type="text" id="firstName" name="firstName" value="<%= accountData.firstName %>" required />
 
   <label for="lastName">Last Name:</label>
-  <input type="text" id="lastName" name="lastName" value="<%= accountData.lastName %>" required>
+  <input type="text" id="lastName" name="lastName" value="<%= accountData.lastName %>" required />
 
   <label for="email">Email:</label>
-  <input type="email" id="email" name="email" value="<%= accountData.email %>" required>
+  <input type="email" id="email" name="email" value="<%= accountData.email %>" required />
 
-  <input type="hidden" name="account_id" value="<%= accountData.id %>">
-  
-  <button type="submit">Update Account</button>
+  <button type="submit">Update</button>
 </form>
+
 
 <!-- Change Password Form -->
 <h2>Change Password</h2>
