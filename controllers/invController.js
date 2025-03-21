@@ -301,47 +301,33 @@ invCont.editInventoryView = async function (req, res, next) {
 /* ***************************
  *  Update Inventory Data
  * ************************** */
-invCont.updateInventory = async function (req, res) {
+invCont.updateInventory = async function (req, res, next) {
   try {
-    const {
-      inv_id,
-      classification_id,
-      inv_make,
-      inv_model,
-      inv_description,
-      inv_image,
-      inv_thumbnail,
-      inv_price,
-      inv_year,
-      inv_miles,
-      inv_color
-    } = req.body;
+    const { inv_id, inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color, classification_id } = req.body;
 
-    const result = await invModel.updateInventory({
+    const updateResult = await invModel.updateVehicleById({
       inv_id,
-      classification_id,
       inv_make,
       inv_model,
+      inv_year,
       inv_description,
       inv_image,
       inv_thumbnail,
       inv_price,
-      inv_year,
       inv_miles,
-      inv_color
+      inv_color,
+      classification_id
     });
 
-    if (result) {
-      req.flash("message", "Vehicle updated successfully!");
-      res.redirect("/inv/");
+    if (updateResult) {
+      req.flash("success", "Vehicle updated successfully!");
+      return res.redirect("/inv/");
     } else {
-      req.flash("message", "Failed to update vehicle. Try again.");
-      res.redirect(`/inv/edit/${inv_id}`);
+      req.flash("error", "Update failed. Please try again.");
+      return res.redirect(`/inv/edit-inventory/${inv_id}`);
     }
   } catch (error) {
-    console.error("Error updating vehicle:", error);
-    req.flash("message", "Error processing update.");
-    res.redirect(`/inv/edit/${inv_id}`);
+    next(error);
   }
 };
 

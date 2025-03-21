@@ -123,4 +123,6 @@ async function updateInventory(
     console.error("model error: " + error)
   }
 }
+
+
 module.exports = { updateInventory, addVehicle, getClassifications, getInventoryByClassificationId, getVehicleById, addClassification };

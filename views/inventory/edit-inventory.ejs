@@ -1,5 +1,5 @@
 <h1><%= title %></h1>
-<form id="updateForm" class="add-inventory" action="/inv/edit-inventory" method="POST">
+<form id="updateForm" class="add-inventory" action="/inv/update" method="POST">
     <label for="classificationList">Classification:</label>
     <select name="classification_id" id="classificationSelect" required>
       <option value="">Choose a Classification</option>
@@ -39,8 +39,7 @@
     <input type="text" id="inv_color" name="inv_color" required value="<%= inv_color%>" >
   
     <button disabled type="submit">Update Vehicle</button>
-    <input type="hidden" name="inv_id"
-    <% if(locals.inv_id) { %> value="<%= locals.inv_id %>"
-    <% } %>>
+    <input type="hidden" name="inv_id" value="<%= inv_id %>">
+
 </form>
 <script src="../../js/inv-update.js"></script>
