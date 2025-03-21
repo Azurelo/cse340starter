@@ -124,5 +124,15 @@ Util.checkLogin = (req, res, next) => {
     return res.redirect("/account/login")
   }
  }
+
+ Util.checkAccountType = (req, res, next) => {
+  if (res.locals.accountData && (res.locals.accountData.accountType === "Employee" || res.locals.accountData.accountType === "Admin")) {
+    return next();
+  } else {
+    req.flash("error", "You do not have permission to access this page.")
+    return res.redirect("/account/login");
+  }
+}
+
 // Export the Util object with all its methods
 module.exports = Util;

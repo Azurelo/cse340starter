@@ -144,11 +144,47 @@ async function buildAccountManagement(req, res, next) {
   }
 }
 
+// Account update handler
+async function updateAccount (req, res) {
+  const { firstName, lastName, email, account_id } = req.body;
+  
+  // Validation (check if email already exists, etc.)
+  const existingAccount = await AccountModel.getByEmail(email);
+  if (existingAccount && existingAccount.id !== account_id) {
+    return res.render("account/update", { error: "Email already in use" });
+  }
 
+  // Update account
+  await accountModel.updateAccount(account_id, firstName, lastName, email);
+  
+  // Success message
+  req.flash("success", "Account updated successfully!");
+  res.redirect(`/account/management/${account_id}`);
+};
 
+// Password change handler
+async function changePassword (req, res) {
+  const { password, account_id } = req.body;
 
+  // Validate password
+  if (password.length < 8) {
+    return res.render("account/update", { error: "Password must be at least 8 characters." });
+  }
 
+  // Hash password
+  const hashedPassword = await bcrypt.hash(password, 10);
+  await accountModel.updatePassword(account_id, hashedPassword);
+  
+  // Success message
+  req.flash("success", "Password changed successfully!");
+  res.redirect(`/account/management/${account_id}`);
+};
 
-module.exports = { accountLogin, buildAccountManagement,buildLogin, buildRegister, registerAccount };
+async function logout (req, res) {
+  res.clearCookie('jwt');
+  res.redirect('/');
+};
+
+module.exports = { logout, changePassword, updateAccount, accountLogin, buildAccountManagement,buildLogin, buildRegister, registerAccount };
 
 

@@ -24,4 +24,15 @@ async function getAccountByEmail (account_email) {
     return new Error("No matching email found")
   }
 }
-module.exports = {getAccountByEmail, registerAccount}
+
+async function updateAccount (accountId, firstName, lastName, email) {
+  const query = 'UPDATE accounts SET firstName = ?, lastName = ?, email = ? WHERE id = ?';
+  await db.execute(query, [firstName, lastName, email, accountId]);
+};
+
+async function updatePassword (accountId, hashedPassword) {
+  const query = 'UPDATE accounts SET password = ? WHERE id = ?';
+  await db.execute(query, [hashedPassword, accountId]);
+};
+
+module.exports = {updateAccount, updatePassword, getAccountByEmail, registerAccount}

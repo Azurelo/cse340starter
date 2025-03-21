@@ -1,3 +1,11 @@
 <h1><%= title %></h1>
 
-<h1>You're logged in!</h1>
+<h2>Welcome <%= accountData.firstName %></h2>
+
+<% if (accountData.accountType === "Employee" || accountData.accountType === "Admin") { %>
+  <h3>Inventory Management</h3>
+  <p><a href="/inventory/management">Go to Inventory Management</a></p>
+<% } %>
+
+<!-- Link to update account information -->
+<a href="/account/update/<%= accountData.id %>">Update Account Information</a>

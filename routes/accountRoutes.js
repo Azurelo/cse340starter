@@ -20,6 +20,7 @@ router.post(
   regValidate.checkLoginData,
   regValidate.handleErrors(accountController.accountLogin)
 )
+router.get('/account/logout', accountController.logout);
 
 router.get("/", Util.checkJWTToken, Util.checkLogin, regValidate.handleErrors(accountController.buildAccountManagement));
 module.exports = router;
