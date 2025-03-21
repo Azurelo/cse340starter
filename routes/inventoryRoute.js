@@ -17,7 +17,11 @@ router.get('/add-classification', invCont.buildAddClassificationView);
 // Route to handle the Add Classification form submission
 router.post('/add-classification', invCont.validateClassification, invCont.addClassification);
 
+//Route to display edit inventory view
+router.get('/edit/:inv_id', utilities.handleErrors(invCont.editInventoryView));
+
 router.get("/add-inventory", invCont.buildAddInventoryView);
 router.get("/getInventory/:classification_id", utilities.handleErrors(invCont.getInventoryJSON))
 router.post("/add-inventory", invCont.validateInventory, invCont.addInventory);
+router.post("/update/", utilities.handleErrors(invCont.checkUpdateData, invCont.updateInventory))
 module.exports = router;

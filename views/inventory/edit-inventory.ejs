@@ -1,0 +1,43 @@
+<h1><%= title %></h1>
+<form id="updateForm" class="add-inventory" action="/inv/edit-inventory" method="POST">
+    <label for="classificationList">Classification:</label>
+    <select name="classification_id" id="classificationSelect" required>
+      <option value="">Choose a Classification</option>
+      <% classificationSelect.forEach(function(classification) { %>
+        <option value="<%= classification.classification_id %>"><%= classification.classification_name %></option>
+      <% }); %>
+    </select>
+  
+    <label for="inv_make">Make:</label>
+    <input type="text" id="inv_make" name="inv_make" required value="<%= inv_make%>">
+  
+    <label for="inv_model">Model:</label>
+    <input type="text" id="inv_model" name="inv_model" required>
+  
+    <label for="inv_description">Description:</label>
+    <textarea id="inv_description" name="inv_description" required></textarea>
+  
+    <label for="inv_image">Image Path:</label>
+    <input type="text" id="inv_image" name="inv_image" required value="/images/vehicles/no-image.png">
+  
+    <label for="inv_thumbnail">Thumbnail Path:</label>
+    <input type="text" id="inv_thumbnail" name="inv_thumbnail" required value="/images/vehicles/no-image-tn.png">
+  
+    <label for="inv_price">Price:</label>
+    <input type="number" id="inv_price" name="inv_price" step="0.01" required>
+  
+    <label for="inv_year">Year:</label>
+    <input type="number" id="inv_year" name="inv_year" required>
+  
+    <label for="inv_miles">Miles:</label>
+    <input type="number" id="inv_miles" name="inv_miles" required>
+  
+    <label for="inv_color">Color:</label>
+    <input type="text" id="inv_color" name="inv_color" required >
+  
+    <button disabled type="submit">Update Vehicle</button>
+    <input type="hidden" name="inv_id"
+    <% if(locals.inv_id) { %> value="<%= locals.inv_id %>"
+    <% } %>>
+</form>
+<script src="../../js/inv-update.js"></script>
