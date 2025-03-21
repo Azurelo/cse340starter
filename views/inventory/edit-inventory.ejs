@@ -4,7 +4,10 @@
     <select name="classification_id" id="classificationSelect" required>
       <option value="">Choose a Classification</option>
       <% classificationSelect.forEach(function(classification) { %>
-        <option value="<%= classification.classification_id %>"><%= classification.classification_name %></option>
+        <option value="<%= classification.classification_id %>" 
+          <% if (classification.classification_id === classification_id) { %> selected <% } %>>
+          <%= classification.classification_name %>
+        </option>
       <% }); %>
     </select>
   
@@ -12,28 +15,28 @@
     <input type="text" id="inv_make" name="inv_make" required value="<%= inv_make%>">
   
     <label for="inv_model">Model:</label>
-    <input type="text" id="inv_model" name="inv_model" required>
+    <input type="text" id="inv_model" name="inv_model" required value="<%= inv_model%>">
   
     <label for="inv_description">Description:</label>
-    <textarea id="inv_description" name="inv_description" required></textarea>
+    <textarea id="inv_description" name="inv_description" placeholder="Some description" required ><%= inv_description%></textarea>
   
     <label for="inv_image">Image Path:</label>
-    <input type="text" id="inv_image" name="inv_image" required value="/images/vehicles/no-image.png">
+    <input type="text" id="inv_image" name="inv_image" required value="<%= inv_image%>">
   
     <label for="inv_thumbnail">Thumbnail Path:</label>
-    <input type="text" id="inv_thumbnail" name="inv_thumbnail" required value="/images/vehicles/no-image-tn.png">
+    <input type="text" id="inv_thumbnail" name="inv_thumbnail" required value="<%= inv_thumbnail%>">
   
     <label for="inv_price">Price:</label>
-    <input type="number" id="inv_price" name="inv_price" step="0.01" required>
+    <input type="number" id="inv_price" name="inv_price" step="0.01" required value="<%= inv_price%>">
   
     <label for="inv_year">Year:</label>
-    <input type="number" id="inv_year" name="inv_year" required>
+    <input type="number" id="inv_year" name="inv_year" required value="<%= inv_year%>">
   
     <label for="inv_miles">Miles:</label>
-    <input type="number" id="inv_miles" name="inv_miles" required>
+    <input type="number" id="inv_miles" name="inv_miles" required value="<%= inv_miles%>">
   
     <label for="inv_color">Color:</label>
-    <input type="text" id="inv_color" name="inv_color" required >
+    <input type="text" id="inv_color" name="inv_color" required value="<%= inv_color%>" >
   
     <button disabled type="submit">Update Vehicle</button>
     <input type="hidden" name="inv_id"
