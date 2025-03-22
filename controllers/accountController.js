@@ -4,6 +4,7 @@ const accountModel = require("../models/account-model");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const bcrypt = require('bcryptjs');
+const pool = require("../database/");
 
 // Deliver login view
 async function buildLogin(req, res, next) {
@@ -149,24 +150,28 @@ async function buildAccountManagement(req, res, next) {
 
 // Update account handler
 async function updateAccount(req, res) {
+  // Destructure the values from req.body
   const { firstName, lastName, email, account_id } = req.body;
+  console.log(req.body)
+  // Ensure all required fields are present
+  if (!firstName || !lastName || !email) {
+      req.flash('error', 'All fields must be filled out!');
+      return res.redirect(`/account/update/${account_id}`);
+  }
 
   try {
-      // Check if email already exists
-      const existingAccount = await accountModel.getAccountByEmail(email);
-      if (existingAccount && existingAccount.account_id !== account_id) {
-          return res.render("account/update", { error: "Email already in use" });
-      }
+      // Use the updated function to run the query
+      const query = 'UPDATE account SET account_firstname = $1, account_lastname = $2, account_email = $3 WHERE account_id = $4';
+      await pool.query(query, [firstName, lastName, email, account_id]);
 
-      // Update account in database
-      await accountModel.updateAccount(account_id, firstName, lastName, email);
-
-      // Success message
-      req.flash("success", "Account updated successfully!");
-      res.redirect(`/account/update/${account_id}`);
+      // Flash success message and redirect
+      req.flash('success', 'Account updated successfully!');
+      return res.redirect(`/account/update/${account_id}`);
   } catch (error) {
-      console.error("Update Account Error:", error.message);
-      res.render("account/update", { error: "An error occurred while updating the account.", accountData: { firstName, lastName, email, account_id } });
+      // Handle errors
+      console.error("Error updating account:", error);
+      req.flash('error', 'There was an error updating the account.');
+      return res.redirect(`/account/update/${account_id}`);
   }
 }
 
@@ -189,7 +194,7 @@ async function changePassword(req, res) {
       res.redirect(`/account/update/${account_id}`); // Redirect to update page for consistency
   } catch (error) {
       console.error("Change Password Error:", error.message);
-      res.render("account/update", { error: "An error occurred while changing the password.", accountData: { account_id } });
+      res.render("account/update", { error: "An error occurred while changing the password.", success: successMessage || null, accountData: { account_id } });
   }
 }
 

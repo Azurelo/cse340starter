@@ -1,24 +1,25 @@
 <h1>Update Your Account</h1>
 
 <!-- Display errors or success messages -->
-<% if (error) { %>
-  <div class="error"><%= error %></div>
-<% } %>
 <% if (success) { %>
   <div class="success"><%= success %></div>
 <% } %>
+<% if (error) { %>
+  <div class="error"><%= error %></div>
+<% } %>
+
 
 <!-- Example form to update account information -->
 <form action="/account/update/" method="POST">
   <label for="firstName">First Name:</label>
   <input type="hidden" name="account_id" value="<%= accountData.account_id %>">
-  <input type="text" id="firstName" name="firstName" value="<%= accountData.firstName %>" required />
+  <input type="text" id="firstName" name="firstName" value="<%= accountData.account_firstname %>" required />
 
   <label for="lastName">Last Name:</label>
-  <input type="text" id="lastName" name="lastName" value="<%= accountData.lastName %>" required />
+  <input type="text" id="lastName" name="lastName" value="<%= accountData.account_lastname %>" required />
 
   <label for="email">Email:</label>
-  <input type="email" id="email" name="email" value="<%= accountData.email %>" required />
+  <input type="email" id="email" name="email" value="<%= accountData.account_email %>" required />
 
   <button type="submit">Update</button>
 </form>

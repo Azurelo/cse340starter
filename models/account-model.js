@@ -46,19 +46,19 @@ async function getAccountById(account_id) {
 /* *****************************
 * Update account information
 * *************************** */
-async function updateAccount(accountId, firstName, lastName, email) {
+async function updateAccount(account_id, firstName, lastName, email) {
     try {
-        const query = 'UPDATE account SET account_firstname = $1, account_lastname = $2, account_email = $3 WHERE account_id = $4';
-        await pool.query(query, [firstName, lastName, email, accountId]);
+      const query = 'UPDATE account SET account_firstname = $1, account_lastname = $2, account_email = $3 WHERE account_id = $4';
+      await pool.query(query, [firstName, lastName, email, account_id]);  // Using pool.query
     } catch (error) {
-        throw new Error(error.message); // Throw error for proper handling
+      throw new Error(error.message); // Throw error for proper handling
     }
-}
+  }
 
-async function updatePassword(accountId, hashedPassword) {
+async function updatePassword(account_id, hashedPassword) {
     try {
         const query = 'UPDATE account SET account_password = $1 WHERE account_id = $2';
-        await pool.query(query, [hashedPassword, accountId]);
+        await pool.query(query, [hashedPassword, account_id]);
     } catch (error) {
         throw new Error(error.message); // Throw error for proper handling
     }
