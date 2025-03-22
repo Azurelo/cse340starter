@@ -25,17 +25,10 @@ router.get('/account/logout', regValidate.handleErrors(accountController.logout)
 router.get("/", Util.checkJWTToken, Util.checkLogin, regValidate.handleErrors(accountController.buildAccountManagement));
 
 // Route for account update page
-router.get('/account/update:id', regValidate.handleErrors(accountController.buildUpdateAccountPage)); 
+router.get('/account/update/:id', regValidate.handleErrors(accountController.buildUpdateAccountPage)); 
 
 // Route to handle the update form submission
 router.post('/account/update', regValidate.handleErrors(accountController.updateAccount)); 
 // In your accounts router file
-router.get('/account/update', (req, res) => {
-    if (!req.user) { // If the user is not logged in
-        return res.redirect('/login');
-    }
-    // Render account management page, pass user data
-    res.render('account/account-management', { user: req.user });
-});
 
 module.exports = router;

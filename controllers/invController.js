@@ -7,6 +7,8 @@ const invCont = {};
  * Build inventory by classification view
  * ************************** */
 invCont.buildByClassificationId = async function (req, res, next) {
+  const loggedin = req.session.loggedin || false
+  const accountData = req.session.accountData || {}
   try {
     const classification_id = req.params.classificationId;
     const data = await invModel.getInventoryByClassificationId(classification_id);
@@ -18,6 +20,8 @@ invCont.buildByClassificationId = async function (req, res, next) {
       title: `${className} Vehicles`,
       nav,
       grid,
+      loggedin,
+      accountData,
     });
   } catch (error) {
     next(error);
@@ -43,6 +47,7 @@ invCont.getVehicleDetail = async function (req, res, next) {
       title: `${vehicleData.inv_make} ${vehicleData.inv_model}`,
       vehicleHTML,
       nav,
+      loggedin,
     });
   } catch (error) {
     next(error);
@@ -53,6 +58,8 @@ invCont.getVehicleDetail = async function (req, res, next) {
  * Management View for Inventory
  * ************************** */
 invCont.buildManagementView = async function (req, res, next) {
+  const loggedin = req.session.loggedin || false
+  const accountData = req.session.accountData || {}
   try {
     let nav = await utilities.getNav(); 
     const flashMessage = req.flash("message") || null; 
@@ -62,6 +69,8 @@ invCont.buildManagementView = async function (req, res, next) {
       nav, 
       message: flashMessage, 
       classificationSelect,
+      loggedin,
+      accountData,
     });
   } catch (error) {
     next(error); 
@@ -72,11 +81,15 @@ invCont.buildManagementView = async function (req, res, next) {
  * Build Add Classification View
  * ************************** */
 invCont.buildAddClassificationView = async function (req, res, next) {
+  const loggedin = req.session.loggedin || false
+  const accountData = req.session.accountData || {}
   try {
     let nav = await utilities.getNav();
     res.render("./inventory/add-classification", {
       title: "Add Classification",
       nav,
+      loggedin,
+      accountData
     });
   } catch (error) {
     next(error);
@@ -107,6 +120,7 @@ invCont.validateClassification = async (req, res, next) => {
  * ************************** */
 invCont.addClassification = async function (req, res, next) {
   const classificationName = req.body.classificationName;
+  const loggedin = req.session.loggedin || false
 
   try {
     // Insert new classification into the database
@@ -121,6 +135,7 @@ invCont.addClassification = async function (req, res, next) {
       title: "Inventory Management",
       nav,  
       message: req.flash('message'), 
+      loggedin,
     });
   } catch (error) {
     req.flash('error', 'Failed to add classification. Please try again.');
@@ -128,7 +143,8 @@ invCont.addClassification = async function (req, res, next) {
     res.render('./inv/add-classification', {
       title: "Add Classification",
       nav,
-      error: 'Failed to add classification. Please try again.'  
+      error: 'Failed to add classification. Please try again.',
+      loggedin, 
     });
   }
 };
@@ -136,6 +152,8 @@ invCont.addClassification = async function (req, res, next) {
 // Display the Add Inventory view
 
 invCont.buildAddInventoryView = async function(req, res) {
+  const loggedin = req.session.loggedin || false
+  const accountData = req.session.accountData || {}
   try {
     const classificationList = await utilities.buildClassificationList();
     console.log(classificationList);  
@@ -145,6 +163,8 @@ invCont.buildAddInventoryView = async function(req, res) {
       nav,
       classificationList,  
       message: req.flash("message"),
+      loggedin,
+      accountData,
     });
   } catch (error) {
     console.error("Error rendering add-inventory view:", error);
@@ -262,6 +282,8 @@ invCont.getInventoryJSON = async (req, res, next) => {
 
 //Build edit inventory view
 invCont.editInventoryView = async function (req, res, next) {
+  const loggedin = req.session.loggedin || false
+  const accountData = req.session.accountData || {}
   try {
     const inv_id = parseInt(req.params.inv_id);
     let nav = await utilities.getNav();
@@ -290,7 +312,9 @@ invCont.editInventoryView = async function (req, res, next) {
       inv_price: itemData.inv_price,
       inv_miles: itemData.inv_miles,
       inv_color: itemData.inv_color,
-      classification_id: itemData.classification_id
+      classification_id: itemData.classification_id,
+      loggedin,
+      accountData,
     });
   } catch (error) {
     next(error);

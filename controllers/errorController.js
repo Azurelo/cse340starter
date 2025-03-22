@@ -1,6 +1,8 @@
 const utilities = require("../utilities/");
 
 function triggerError(req, res, next) {
+    const loggedin = req.session.loggedin || false
+    const accountData = req.session.accountData || {}
     try {
         throw new Error("Intentional 500 error for testing!");
     } catch (error) {
@@ -8,7 +10,9 @@ function triggerError(req, res, next) {
             res.status(500).render('errors/500', { 
                 title: "Internal Server Error", 
                 nav,
-                error: error.message
+                error: error.message,
+                loggedin,
+                accountData,
             });
         }).catch(next); 
     }

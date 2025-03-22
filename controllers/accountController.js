@@ -7,6 +7,8 @@ const bcrypt = require('bcryptjs');
 
 // Deliver login view
 async function buildLogin(req, res, next) {
+  let loggedin = req.session.loggedin || false;
+  let accountData = req.session.accountData || null;
   try {
     let nav = await utilities.getNav();
     let notice = req.flash("notice");
@@ -15,6 +17,8 @@ async function buildLogin(req, res, next) {
       nav,
       notice,
       errors: null,
+      loggedin,
+      accountData
     });
   } catch (error) {
     next(error);
@@ -23,6 +27,8 @@ async function buildLogin(req, res, next) {
 
 // Deliver registration view
 async function buildRegister(req, res, next) {
+  let loggedin = req.session.loggedin || false;
+  let accountData = req.session.accountData || null;
   try {
     let nav = await utilities.getNav();
     console.log('Nav:', nav);
@@ -30,6 +36,8 @@ async function buildRegister(req, res, next) {
       title: "Register",
       nav,
       errors: null,
+      loggedin,
+      accountData,
     });
   } catch (error) {
     console.error("Error in buildRegister:", error);
@@ -72,58 +80,59 @@ async function accountLogin(req, res) {
   let nav = await utilities.getNav();
   const { account_email, account_password } = req.body;
   const accountData = await accountModel.getAccountByEmail(account_email);
-
-  console.log("Account Data:", accountData);
-
+  
   if (!accountData) {
     req.flash("notice", "Please check your credentials and try again.");
-    res.status(400).render("account/login", {
+    return res.status(400).render("account/login", {
       title: "Login",
       nav,
       errors: null,
       account_email,
+      loggedin: false, // Ensure this is false if login fails
     });
-    return;
   }
+
   try {
     if (await bcrypt.compare(account_password, accountData.account_password)) {
       delete accountData.account_password;
       const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 });
-      
-      // Set session.loggedin to true after successful login
-      req.session.loggedin = true;
 
-      if (process.env.NODE_ENV === 'development') {
-        res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
-      } else {
-        res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 });
-      }
+      req.session.loggedin = true;
+      req.session.accountData = accountData; // Store user info in session
+      
+      res.cookie("jwt", accessToken, { httpOnly: true, secure: process.env.NODE_ENV !== 'development', maxAge: 3600 * 1000 });
+      
       return res.redirect("/account/");
     } else {
-      req.flash("message notice", "Please check your credentials and try again.");
+      req.flash("notice", "Please check your credentials and try again.");
       res.status(400).render("account/login", {
         title: "Login",
         nav,
         errors: null,
         account_email,
+        loggedin: false, // Ensure this is passed correctly
       });
     }
   } catch (error) {
-    throw new Error('Access Forbidden');
+    console.error("Login error:", error);
+    res.status(500).send("Internal Server Error");
   }
 }
+
 
 
 // Account management page
 async function buildAccountManagement(req, res, next) {
   try {
     let nav = await utilities.getNav();
-    let loggedin = req.session.loggedin || false;  // Add loggedin status
+    let loggedin = req.session.loggedin || false;
+    let accountData = req.session.accountData || null; // Store account data in session
 
     res.render("account/account-management", {
       title: "Account Management",
       nav,
-      loggedin,  // Pass loggedin variable here
+      loggedin,
+      accountData, // Pass account data
       errors: null,
     });
   } catch (error) {
@@ -131,6 +140,7 @@ async function buildAccountManagement(req, res, next) {
     next(error);
   }
 }
+
 
 
 // Update account handler
@@ -148,7 +158,8 @@ async function updateAccount(req, res) {
 
   // Success message
   req.flash("success", "Account updated successfully!");
-  res.redirect(`/account/management/${account_id}`);
+  res.redirect(`/account/update/${account_id}`);
+
 }
 
 // Change password handler
@@ -178,12 +189,12 @@ async function logout(req, res) {
 async function buildUpdateAccountPage(req, res) {
   const { id } = req.params;
   const accountData = await accountModel.getAccountById(id); // Use correct model method
-
+  let loggedin = req.session.loggedin || false;
   if (!accountData) {
     return res.status(404).send("Account not found");
   }
 
-  const loggedin = req.session.loggedin || false;
+  
   res.render("account/update-account", {
     title: "Update Account",
     accountData,
