@@ -130,6 +130,7 @@ async function buildAccountManagement(req, res, next) {
     let nav = await utilities.getNav();
     let loggedin = req.session.loggedin || false;
     let accountData = req.session.accountData || null; // Store account data in session
+    console.log("Rendering Account Management Page with Data:", accountData);
 
     res.render("account/account-management", {
       title: "Account Management",
@@ -150,37 +151,48 @@ async function buildAccountManagement(req, res, next) {
 async function updateAccount(req, res) {
   const { firstName, lastName, email, account_id } = req.body;
 
-  // Check if email already exists
-  const existingAccount = await accountModel.getAccountByEmail(email);
-  if (existingAccount && existingAccount.account_id !== account_id) {
-    return res.render("account/update", { error: "Email already in use" });
+  try {
+      // Check if email already exists
+      const existingAccount = await accountModel.getAccountByEmail(email);
+      if (existingAccount && existingAccount.account_id !== account_id) {
+          return res.render("account/update", { error: "Email already in use" });
+      }
+
+      // Update account in database
+      await accountModel.updateAccount(account_id, firstName, lastName, email);
+
+      // Success message
+      req.flash("success", "Account updated successfully!");
+      res.redirect(`/account/update/${account_id}`);
+  } catch (error) {
+      console.error("Update Account Error:", error.message);
+      res.render("account/update", { error: "An error occurred while updating the account.", accountData: { firstName, lastName, email, account_id } });
   }
-
-  // Update account in database
-  await accountModel.updateAccount(account_id, firstName, lastName, email);
-
-  // Success message
-  req.flash("success", "Account updated successfully!");
-  res.redirect(`/account/update/${account_id}`);
-
 }
+
 
 // Change password handler
 async function changePassword(req, res) {
   const { password, account_id } = req.body;
 
   if (password.length < 8) {
-    return res.render("account/update", { error: "Password must be at least 8 characters." });
+      return res.render("account/update", { error: "Password must be at least 8 characters." });
   }
 
-  // Hash the new password and update it in the database
-  const hashedPassword = await bcrypt.hash(password, 10);
-  await accountModel.updatePassword(account_id, hashedPassword);
+  try {
+      // Hash the new password and update it in the database
+      const hashedPassword = await bcrypt.hash(password, 10);
+      await accountModel.updatePassword(account_id, hashedPassword);
 
-  // Success message
-  req.flash("success", "Password changed successfully!");
-  res.redirect(`/account/management/${account_id}`);
+      // Success message
+      req.flash("success", "Password changed successfully!");
+      res.redirect(`/account/update/${account_id}`); // Redirect to update page for consistency
+  } catch (error) {
+      console.error("Change Password Error:", error.message);
+      res.render("account/update", { error: "An error occurred while changing the password.", accountData: { account_id } });
+  }
 }
+
 
 // Log out handler
 async function logout(req, res) {
@@ -190,7 +202,7 @@ async function logout(req, res) {
           return res.status(500).send("Error logging out.");
       }
       res.clearCookie("jwt");
-      res.redirect("/account/login");
+      res.redirect("/");
   });
 }
 
@@ -198,7 +210,7 @@ async function logout(req, res) {
 async function buildUpdateAccountPage(req, res) {
   let nav = await utilities.getNav();
   const { id } = req.params;
-  const accountData = await accountModel.getAccountById(id); // Use correct model method
+  const accountData = await accountModel.getAccountById(id); 
   console.log("Update Account Route Hit:", req.params.id);
   console.log("Fetched Account Data:", accountData);
   console.log("Requested ID:", id);
@@ -206,14 +218,14 @@ async function buildUpdateAccountPage(req, res) {
   if (!accountData) {
     return res.status(404).send("Account not found");
   }
-
+  let successMessage = req.flash("success"); 
   
   res.render("account/update", {
     title: "Update Account",
     nav,
     accountData,
     error: null,
-    success: null,
+    success: successMessage.length ? successMessage[0] : null,
     loggedin,
   });
 }
