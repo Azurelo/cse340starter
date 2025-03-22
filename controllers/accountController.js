@@ -47,6 +47,8 @@ async function buildRegister(req, res, next) {
 
 // Process registration
 async function registerAccount(req, res) {
+  let loggedin = req.session.loggedin || false;
+  let accountData = req.session.accountData || null;
   let nav = await utilities.getNav();
   const { account_firstname, account_lastname, account_email, account_password } = req.body;
 
@@ -71,6 +73,7 @@ async function registerAccount(req, res) {
       title: "Registration",
       nav,
       errors: null,
+      loggedin,
     });
   }
 }
@@ -80,7 +83,6 @@ async function accountLogin(req, res) {
   let nav = await utilities.getNav();
   const { account_email, account_password } = req.body;
   const accountData = await accountModel.getAccountByEmail(account_email);
-  
   if (!accountData) {
     req.flash("notice", "Please check your credentials and try again.");
     return res.status(400).render("account/login", {
