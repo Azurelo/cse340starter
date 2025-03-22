@@ -42,6 +42,9 @@ nav ul li{
   list-style: none;
   font-size: 1.5rem;
 }
+ul{
+  list-style: none;
+}
 nav a{
   text-decoration: none;
   color: white;
@@ -324,7 +327,53 @@ input:required:invalid, input:focus:invalid {
  }
 
 input:required:valid {
-  border-color: greenyellow;
+  border-color: green;
+}
+
+#inventoryDisplay {
+  width: 80%;
+  max-width: 900px;
+  border-collapse: collapse;
+  margin: 20px auto;
+  margin-top: 20px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+#inventoryDisplay th, #inventoryDisplay td {
+  padding: 15px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+#inventoryDisplay th {
+  background-color: #4CAF50;
+  color: black;
+  font-size: 18px;
+}
+
+#inventoryDisplay td {
+  font-size: 16px;
+}
+
+#inventoryDisplay tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+#inventoryDisplay tr:hover {
+  background-color: #ddd;
+}
+
+#inventoryDisplay a {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+}
+
+#inventoryDisplay a:hover {
+  text-decoration: underline;
 }
 /* Media query for small screens (below 768px) */
 @media (max-width: 768px) {

@@ -111,7 +111,7 @@ Util.checkAccountType = (req, res, next) => {
   console.log("Account Data:", res.locals.accountData); // Debugging: log account data
   
   if (res.locals.accountData && 
-      (res.locals.accountData.accountType === "Employee" || res.locals.accountData.accountType === "Admin")) {
+      (res.locals.accountData.account_type === "Employee" || res.locals.accountData.account_type === "Admin")) {
     return next(); // Allow access if account type is Employee or Admin
   } else {
     req.flash("error", "You do not have permission to access this page.");
