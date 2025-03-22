@@ -148,7 +148,7 @@ nav a{
 .add-inventory button {
   padding: 10px 20px;
   background-color: #007bff;
-  color: white;
+  color: black;
   border: none;
   border-radius: 4px;
   font-size: 1rem;
@@ -281,7 +281,7 @@ form button {
   padding: 10px;
   background: skyblue;
   border: none;
-  color: white;
+  color: black;
   cursor: pointer;
 }
 
