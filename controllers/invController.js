@@ -32,10 +32,11 @@ invCont.buildByClassificationId = async function (req, res, next) {
  * Get vehicle details
  * ************************** */
 invCont.getVehicleDetail = async function (req, res, next) {
+  const loggedin = req.session.loggedin || false
   try {
     const inv_id = req.params.inv_id;
     const vehicleData = await invModel.getVehicleById(inv_id);
-
+ 
     if (!vehicleData) {
       return res.status(404).render('errors/404', { title: "Not Found" });
     }

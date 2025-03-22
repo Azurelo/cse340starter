@@ -4,10 +4,11 @@
   </span>
   <div id="tools">
     <% if (loggedin) { %>
-      <a href="/account/management"> <%= "Welcome Basic" || accountData.account_firstName %></a> 
+      <a href="/account/management"> <%= accountData.account_firstName || "Welcome Basic" %></a> 
       <a href="/account/logout">Logout</a>
     <% } else { %>
-      <a href="/account/login">My Account</a>
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
     <% } %>
   </div>
 </header>

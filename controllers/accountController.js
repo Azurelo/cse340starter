@@ -181,8 +181,11 @@ async function changePassword(req, res) {
 
 // Log out handler
 async function logout(req, res) {
-  res.clearCookie('jwt');
-  res.redirect('/');
+  req.session.destroy((err) => {
+    if (err) console.error("Logout Error:", err);
+    res.clearCookie("jwt");
+    res.redirect("/");
+  });
 }
 
 // Render update account page
