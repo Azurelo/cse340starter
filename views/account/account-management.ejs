@@ -9,11 +9,11 @@
   </div>
 <% } %>
 
-<% if (accountData.account_type === "Employee" || accountData.accountType === "Admin") { %>
+<% if (accountData.account_type === "Employee" || accountData.account_type === "Admin") { %>
   <h3>Inventory Management</h3>
   <p><a href="/inv">Go to Inventory Management</a></p>
 <% } %>
-<p><%= accountData.account_id %></p>
-
+<!-- <p><%= accountData.account_id %></p> -->
+<h3>Account Management</h3>
 <!-- Link to update account information -->
 <a href="/account/update/<%= accountData.account_id %>">Update Account Information</a>
