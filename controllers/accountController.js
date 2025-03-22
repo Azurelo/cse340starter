@@ -66,6 +66,7 @@ async function registerAccount(req, res) {
 
   if (regResult) {
     req.flash("notice", `Congratulations, you're registered ${account_firstname}. Please log in.`);
+    loggedin = true;
     res.redirect("/account/login");
   } else {
     req.flash("notice", "Sorry, the registration failed.");
@@ -184,24 +185,32 @@ async function changePassword(req, res) {
 // Log out handler
 async function logout(req, res) {
   req.session.destroy((err) => {
-    if (err) console.error("Logout Error:", err);
-    res.clearCookie("jwt");
-    res.redirect("/");
+      if (err) {
+          console.error("Logout Error:", err);
+          return res.status(500).send("Error logging out.");
+      }
+      res.clearCookie("jwt");
+      res.redirect("/account/login");
   });
 }
 
 // Render update account page
 async function buildUpdateAccountPage(req, res) {
+  let nav = await utilities.getNav();
   const { id } = req.params;
   const accountData = await accountModel.getAccountById(id); // Use correct model method
+  console.log("Update Account Route Hit:", req.params.id);
+  console.log("Fetched Account Data:", accountData);
+  console.log("Requested ID:", id);
   let loggedin = req.session.loggedin || false;
   if (!accountData) {
     return res.status(404).send("Account not found");
   }
 
   
-  res.render("account/update-account", {
+  res.render("account/update", {
     title: "Update Account",
+    nav,
     accountData,
     error: null,
     success: null,

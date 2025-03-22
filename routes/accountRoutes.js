@@ -20,15 +20,15 @@ router.post(
   regValidate.checkLoginData,
   regValidate.handleErrors(accountController.accountLogin)
 )
-router.get('/account/logout', regValidate.handleErrors(accountController.logout));
+router.get('/logout', regValidate.handleErrors(accountController.logout));
 
 router.get("/", Util.checkJWTToken, Util.checkLogin, regValidate.handleErrors(accountController.buildAccountManagement));
 
 // Route for account update page
-router.get('/account/update/:id', regValidate.handleErrors(accountController.buildUpdateAccountPage)); 
+router.get('/update/:id', regValidate.handleErrors(accountController.buildUpdateAccountPage)); 
 
 // Route to handle the update form submission
-router.post('/account/update', regValidate.handleErrors(accountController.updateAccount)); 
+router.post('/update', regValidate.handleErrors(accountController.updateAccount)); 
 // In your accounts router file
 
 module.exports = router;

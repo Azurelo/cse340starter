@@ -51,7 +51,11 @@ app.use((req, res, next) => {
   res.locals.error = req.flash("error"); // Flash message for error notifications
   next();
 });
-
+app.use((req, res, next) => {
+  res.locals.loggedin = req.session && req.session.user ? true : false;
+  res.locals.accountData = req.session.user || {};
+  next();
+});
 // Express Messages Middleware
 app.use((req, res, next) => {
   res.locals.messages = require("express-messages")(req, res);
