@@ -9,7 +9,7 @@
 <% } %>
 
 <!-- Example form to update account information -->
-<form action="/account/update" method="POST">
+<form action="/account/update/" method="POST">
   <label for="firstName">First Name:</label>
   <input type="hidden" name="account_id" value="<%= accountData.account_id %>">
   <input type="text" id="firstName" name="firstName" value="<%= accountData.firstName %>" required />
@@ -30,7 +30,7 @@
   <label for="password">New Password:</label>
   <input type="password" id="password" name="password" required>
   
-  <input type="hidden" name="account_id" value="<%= accountData.id %>">
+  <input type="hidden" name="account_id" value="<%= accountData.account_id %>">
 
   <button type="submit">Change Password</button>
 </form>
