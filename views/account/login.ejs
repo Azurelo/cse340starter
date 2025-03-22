@@ -1,7 +1,9 @@
 <h1><%= title %></h1>
 
 <% if (notice && notice.length) { %>
-  <div class="alert alert-success"><%= notice[0] %></div>
+  <% notice.forEach(function(msg) { %>
+    <div class="alert alert-success"><%= msg %></div>
+  <% }) %>
 <% } %>
 
 

@@ -92,6 +92,7 @@ async function accountLogin(req, res) {
       nav,
       errors: null,
       account_email,
+      notice: req.flash('notice'),
       loggedin: false, // Ensure this is false if login fails
     });
   }
@@ -179,24 +180,36 @@ async function updateAccount(req, res) {
 // Change password handler
 async function changePassword(req, res) {
   const { password, account_id } = req.body;
-
+  let nav = await utilities.getNav();
+  // Check if the password meets the minimum length requirement
   if (password.length < 8) {
-      return res.render("account/update", { error: "Password must be at least 8 characters." });
+    return res.render("account/update", { 
+      error: "Password must be at least 8 characters." 
+    });
   }
 
   try {
-      // Hash the new password and update it in the database
-      const hashedPassword = await bcrypt.hash(password, 10);
-      await accountModel.updatePassword(account_id, hashedPassword);
+    // Hash the new password and update it in the database
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await accountModel.updatePassword(account_id, hashedPassword);
+    // Success message via flash
+    req.flash("success", "Password changed successfully!");
 
-      // Success message
-      req.flash("success", "Password changed successfully!");
-      res.redirect(`/account/update/${account_id}`); // Redirect to update page for consistency
+    // Redirect to the update page with the success message
+    return res.redirect(`/account/update/${account_id}`);
   } catch (error) {
-      console.error("Change Password Error:", error.message);
-      res.render("account/update", { error: "An error occurred while changing the password.", success: successMessage || null, accountData: { account_id } });
+    console.error("Change Password Error:", error.message);
+
+    // Render with error and success message as fallback
+    return res.render("account/update", { 
+      error: "An error occurred while changing the password.", 
+      success: req.flash("success"), // Get the flash message if any
+      accountData: { account_id },
+      nav,
+    });
   }
 }
+
 
 
 // Log out handler

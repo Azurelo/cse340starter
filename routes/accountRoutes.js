@@ -22,7 +22,7 @@ router.post(
 )
 router.get('/logout', regValidate.handleErrors(accountController.logout));
 
-router.get("/", Util.checkJWTToken, Util.checkLogin, regValidate.handleErrors(accountController.buildAccountManagement));
+router.get("/", Util.checkLogin, regValidate.handleErrors(accountController.buildAccountManagement));
 
 // Route for account update page
 router.get('/update/:id', regValidate.handleErrors(accountController.buildUpdateAccountPage)); 
@@ -30,5 +30,5 @@ router.get('/update/:id', regValidate.handleErrors(accountController.buildUpdate
 // Route to handle the update form submission
 router.post('/update', regValidate.handleErrors(accountController.updateAccount)); 
 // In your accounts router file
-
+router.post('/update/password', regValidate.registationRules(), regValidate.handleErrors(accountController.changePassword)); 
 module.exports = router;

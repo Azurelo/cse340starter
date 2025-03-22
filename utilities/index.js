@@ -94,45 +94,52 @@ Util.buildVehicleDetailHTML = function(vehicle) {
 /* ****************************************
 * Middleware to check token validity
 **************************************** */
-Util.checkJWTToken = (req, res, next) => {
-  if (req.cookies.jwt) {
-   jwt.verify(
-    req.cookies.jwt,
-    process.env.ACCESS_TOKEN_SECRET,
-    function (err, accountData) {
-     if (err) {
-      req.flash("Please log in")
-      res.clearCookie("jwt")
-      return res.redirect("/account/login")
-     }
-     res.locals.accountData = accountData
-     res.locals.loggedin = 1
-     next()
-    })
-  } else {
-   next()
-  }
- }
-/* ****************************************
- *  Check Login
- * ************************************ */
+// Middleware to check if user is logged in (JWT token validation)
 Util.checkLogin = (req, res, next) => {
   if (res.locals.loggedin) {
-    next()
-  } else {
-    req.flash("notice", "Please log in.")
-    return res.redirect("/account/login")
-  }
- }
-
- Util.checkAccountType = (req, res, next) => {
-  if (res.locals.accountData && (res.locals.accountData.accountType === "Employee" || res.locals.accountData.accountType === "Admin")) {
+    console.log("User is logged in:", res.locals.accountData); // Debugging: check if logged in
     return next();
   } else {
-    req.flash("error", "You do not have permission to access this page.")
-    return res.redirect("/account/login");
+    req.flash("notice", "Please log in.");
+    return res.redirect("/account/login"); // Redirect if not logged in
   }
-}
+};
+
+
+// Middleware to check account type (Employee or Admin)
+Util.checkAccountType = (req, res, next) => {
+  console.log("Account Data:", res.locals.accountData); // Debugging: log account data
+  
+  if (res.locals.accountData && 
+      (res.locals.accountData.accountType === "Employee" || res.locals.accountData.accountType === "Admin")) {
+    return next(); // Allow access if account type is Employee or Admin
+  } else {
+    req.flash("error", "You do not have permission to access this page.");
+    return res.redirect("/account/login"); // Redirect if account type is not Employee/Admin
+  }
+};
+
+
+// Middleware to check if a JWT token is present and valid
+Util.checkJWTToken = (req, res, next) => {
+  if (req.cookies.jwt) {
+    jwt.verify(req.cookies.jwt, process.env.ACCESS_TOKEN_SECRET, function (err, accountData) {
+      if (err) {
+        req.flash("error", "Please log in.");
+        res.clearCookie("jwt");
+        return res.redirect("/account/login");
+      }
+      res.locals.accountData = accountData;
+      res.locals.loggedin = true; // Set loggedin flag
+      console.log("Account Data in JWT:", accountData); // Debugging log
+      next();
+    });
+  } else {
+    console.log("No JWT token found, proceeding to next middleware.");
+    next(); // Proceed to next middleware if no token exists
+  }
+};
+
 
 // Export the Util object with all its methods
 module.exports = Util;
