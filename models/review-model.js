@@ -3,6 +3,7 @@ const pool = require('../database/');
 // Add a new review
 async function addReview(reviewText, invId, accountId) {
     const sql = `INSERT INTO review (review_text, inv_id, account_id) VALUES ($1, $2, $3) RETURNING *`;
+    console.log('Executing SQL:', sql, [reviewText, invId, accountId]); 
     const result = await pool.query(sql, [reviewText, invId, accountId]);
     return result.rows[0];
 }

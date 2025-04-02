@@ -22,7 +22,7 @@ const inventoryRoute = require("./routes/inventoryRoute");
 const errorRoutes = require("./routes/errorRoutes");
 const accountRoute = require("./routes/accountRoutes");
 const utilities = require("./utilities");
-
+const reviewRoutes = require("./routes/reviewRoutes")
 /* ***********************
  * Middleware
  *************************/
@@ -84,6 +84,7 @@ app.get("/", baseController.buildHome);
 // Inventory routes
 app.use("/inv", inventoryRoute);
 app.use("/account", accountRoute);
+app.use("/review", reviewRoutes);
 app.use(errorRoutes);
 
 /* ***********************

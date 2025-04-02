@@ -10,9 +10,11 @@ async function addReview(req, res) {
 
     try {
         const newReview = await reviewModel.addReview(review_text, inv_id, account_id);
-        res.redirect(`/inventory/detail/${inv_id}`);
+        console.log('New review added:', newReview);
+        res.redirect(`/inv/detail/${inv_id}`);
     } catch (error) {
         console.error(error);
+        console.error('Failed to add review:', error);
         res.status(500).json({ error: 'Failed to add review' });
     }
 }
