@@ -9,14 +9,14 @@ async function addReview(reviewText, invId, accountId) {
 
 // Get all reviews for a specific inventory item
 async function getReviewsByInventoryId(invId) {
-    const sql = `SELECT r.review_text, a.screen_name, r.review_date 
+    const sql = `SELECT r.review_text, a.account_firstname, r.review_date 
                  FROM review r 
                  JOIN account a ON r.account_id = a.account_id 
                  WHERE r.inv_id = $1 
                  ORDER BY r.review_date DESC`;
     const result = await pool.query(sql, [invId]);
     return result.rows;
-}
+  }  
 
 // Get all reviews by a specific account
 async function getReviewsByAccountId(accountId) {

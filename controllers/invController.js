@@ -1,6 +1,6 @@
 const invModel = require("../models/inventory-model");
 const utilities = require("../utilities/");
-
+const reviewModel = require("../models/review-model")
 const invCont = {};
 
 /* ***************************
@@ -32,15 +32,20 @@ invCont.buildByClassificationId = async function (req, res, next) {
  * Get vehicle details
  * ************************** */
 invCont.getVehicleDetail = async function (req, res, next) {
-  const loggedin = req.session.loggedin || false
+  const loggedin = req.session.loggedin || false;
+  const inv_id = req.params.inv_id; // Get inv_id from URL params
+  const user = req.session.user || null;
   try {
-    const inv_id = req.params.inv_id;
+    // Get vehicle data
     const vehicleData = await invModel.getVehicleById(inv_id);
- 
+    
     if (!vehicleData) {
       return res.status(404).render('errors/404', { title: "Not Found" });
     }
 
+    // Fetch reviews for the vehicle using the review model
+    const reviews = await reviewModel.getReviewsByInventoryId(inv_id);
+    
     let nav = await utilities.getNav();
     const vehicleHTML = utilities.buildVehicleDetailHTML(vehicleData);
 
@@ -49,6 +54,8 @@ invCont.getVehicleDetail = async function (req, res, next) {
       vehicleHTML,
       nav,
       loggedin,
+      reviews: reviews,
+      user: user,
     });
   } catch (error) {
     next(error);

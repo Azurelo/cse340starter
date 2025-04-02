@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const bcrypt = require('bcryptjs');
 const pool = require("../database/");
-
+const reviewModel = require("../models/review-model")
 // Deliver login view
 async function buildLogin(req, res, next) {
   let loggedin = req.session.loggedin || false;
@@ -133,13 +133,14 @@ async function buildAccountManagement(req, res, next) {
     let loggedin = req.session.loggedin || false;
     let accountData = req.session.accountData || null; // Store account data in session
     console.log("Rendering Account Management Page with Data:", accountData);
-
+    const reviews = await reviewModel.getReviewsByAccountId(accountData.account_id);
     res.render("account/account-management", {
       title: "Account Management",
       nav,
       loggedin,
       accountData, // Pass account data
       errors: null,
+      reviews: reviews || [],
     });
   } catch (error) {
     console.error("Error in buildAccountManagement:", error);
