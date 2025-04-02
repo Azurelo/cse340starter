@@ -34,7 +34,7 @@ invCont.buildByClassificationId = async function (req, res, next) {
 invCont.getVehicleDetail = async function (req, res, next) {
   const loggedin = req.session.loggedin || false;
   const inv_id = req.params.inv_id; // Get inv_id from URL params
-  const user = req.session.user || null;
+
   try {
     // Get vehicle data
     const vehicleData = await invModel.getVehicleById(inv_id);
@@ -48,14 +48,16 @@ invCont.getVehicleDetail = async function (req, res, next) {
     
     let nav = await utilities.getNav();
     const vehicleHTML = utilities.buildVehicleDetailHTML(vehicleData);
-
+    console.log(res.locals.accountData);
+    console.log(res.locals.accountData);
     res.render('inventory/detail', {
       title: `${vehicleData.inv_make} ${vehicleData.inv_model}`,
       vehicleHTML,
       nav,
       loggedin,
       reviews: reviews,
-      user: user,
+      accountData: res.locals.accountData,
+      inv_id,
     });
   } catch (error) {
     next(error);

@@ -14,11 +14,11 @@
         <p>No reviews yet. Be the first to add one!</p>
     <% } %>
 
-    <% if (user) { %>
+    <% if (loggedin) { %>
         <form action="/review/add" method="POST">
             <textarea name="review_text" required></textarea>
-            <input type="hidden" name="inv_id" value="<%= inventory.inv_id %>">
-            <input type="hidden" name="account_id" value="<%= user.account_id %>">
+            <input type="hidden" name="inv_id" value="<%= inv_id %>">
+            <input type="hidden" name="account_id" value="<%= accountData.account_id %>">
             <button type="submit">Submit Review</button>
         </form>
     <% } else { %>

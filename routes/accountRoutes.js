@@ -22,7 +22,7 @@ router.post(
 )
 router.get('/logout', regValidate.handleErrors(accountController.logout));
 
-router.get("/", Util.checkLogin, regValidate.handleErrors(accountController.buildAccountManagement));
+router.get("/", Util.checkJWTToken, Util.checkLogin, regValidate.handleErrors(accountController.buildAccountManagement));
 
 // Route for account update page
 router.get('/update/:id', regValidate.handleErrors(accountController.buildUpdateAccountPage)); 

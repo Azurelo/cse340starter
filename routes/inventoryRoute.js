@@ -8,7 +8,7 @@ const Util = require('../utilities/index');
 router.get("/type/:classificationId", utilities.handleErrors(invCont.buildByClassificationId)); 
 
 // Route to get vehicle details
-router.get("/detail/:inv_id", utilities.handleErrors(invCont.getVehicleDetail)); 
+router.get("/detail/:inv_id", Util.checkJWTToken, utilities.handleErrors(invCont.getVehicleDetail)); 
 
 // Route to access the inventory management view (restricted to logged-in employees or admins)
 router.get("/", Util.checkLogin, Util.checkAccountType, utilities.handleErrors(invCont.buildManagementView));
