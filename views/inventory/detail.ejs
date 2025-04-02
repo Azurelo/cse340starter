@@ -1,3 +1,28 @@
 <main>
     <%- vehicleHTML %>
+    <h2>Reviews</h2>
+
+    <% if (reviews.length) { %>
+        <ul>
+            <% reviews.forEach(review => { %>
+                <li>
+                    <strong><%= review.screen_name %></strong>: <%= review.review_text %>
+                </li>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <p>No reviews yet. Be the first to add one!</p>
+    <% } %>
+
+    <% if (user) { %>
+        <form action="/review/add" method="POST">
+            <textarea name="review_text" required></textarea>
+            <input type="hidden" name="inv_id" value="<%= inventory.inv_id %>">
+            <input type="hidden" name="account_id" value="<%= user.account_id %>">
+            <button type="submit">Submit Review</button>
+        </form>
+    <% } else { %>
+        <p><a href="/account/login">Log in</a> to write a review.</p>
+    <% } %>
+
 </main>

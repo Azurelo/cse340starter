@@ -17,3 +17,23 @@
 <h3>Account Management</h3>
 <!-- Link to update account information -->
 <a href="/account/update/<%= accountData.account_id %>">Update Account Information</a>
+
+<h2>Your Reviews</h2>
+
+<% if (reviews.length) { %>
+    <ul>
+        <% reviews.forEach(review => { %>
+            <li>
+                <%= review.review_text %> 
+                <form action="/review/edit" method="POST">
+                    <input type="hidden" name="review_id" value="<%= review.review_id %>">
+                    <textarea name="review_text"><%= review.review_text %></textarea>
+                    <button type="submit">Update</button>
+                </form>
+                <a href="/review/delete/<%= review.review_id %>">Delete</a>
+            </li>
+        <% }); %>
+    </ul>
+<% } else { %>
+    <p>You haven't written any reviews yet.</p>
+<% } %>
