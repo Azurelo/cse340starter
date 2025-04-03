@@ -15,6 +15,7 @@
 
     <% if (loggedin) { %>
         <form action="/reviews/add" method="POST">
+            <label for="review_text" class="review">Review</label>
             <textarea name="review_text" required></textarea>
             <input type="hidden" name="inv_id" value="<%= inv_id %>">
             <input type="hidden" name="account_id" value="<%= accountData.account_id %>">
