@@ -1,0 +1,7 @@
+<h1>Edit Review</h1>
+<form action="/reviews/edit/<%= review.review_id %>" method="POST">
+    <textarea name="review_text"><%= review.review_text %></textarea>
+    <input type="hidden" name="review_id" value="<%= review.review_id %>">
+    <button type="submit">Save Changes</button>
+</form>
+

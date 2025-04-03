@@ -1,5 +1,5 @@
 const reviewModel = require('../models/review-model');
-
+const utilities = require("../utilities/");
 // Add a review
 async function addReview(req, res) {
     const { review_text, inv_id, account_id } = req.body;
@@ -10,7 +10,6 @@ async function addReview(req, res) {
 
     try {
         const newReview = await reviewModel.addReview(review_text, inv_id, account_id);
-        console.log('New review added:', newReview);
         res.redirect(`/inv/detail/${inv_id}`);
     } catch (error) {
         console.error(error);
@@ -31,28 +30,57 @@ async function displayReviews(req, res) {
     }
 }
 
+//Display Edit form
+async function editReviewForm(req, res) {
+    const { review_id } = req.params;
+    let nav = await utilities.getNav();
+    try {
+        const review = await reviewModel.getReviewById(review_id);
+        if (review) {
+            res.render('./inventory/edit-review', { review, nav, title: "Edit Review" });
+        } else {
+            res.status(404).json({ error: 'Review not found' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to load review for editing' });
+    }
+}
+
+
 // Edit a review
 async function editReview(req, res) {
-    const { review_id, review_text } = req.body;
+    const { review_text } = req.body;
+    const { review_id } = req.params;
     try {
         const updatedReview = await reviewModel.updateReview(review_id, review_text);
-        res.redirect('/account/admin');
+
+        if (updatedReview) {
+            req.flash("success", "Review updated successfully!");
+            res.redirect('/account');
+        } else {
+            req.flash("error", "Review update failed. Please try again.");
+            res.redirect(`/reviews/edit/${review_id}`);
+        }
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Failed to update review' });
     }
 }
 
+
+
+
 // Delete a review
 async function deleteReview(req, res) {
     const { review_id } = req.params;
     try {
         await reviewModel.deleteReview(review_id);
-        res.redirect('/account/admin');
+        res.redirect('/account');
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Failed to delete review' });
     }
 }
 
-module.exports = { addReview, displayReviews, editReview, deleteReview };
+module.exports = { addReview, editReviewForm, displayReviews, editReview, deleteReview };

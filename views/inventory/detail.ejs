@@ -15,7 +15,7 @@
     <% } %>
 
     <% if (loggedin) { %>
-        <form action="/review/add" method="POST">
+        <form action="/reviews/add" method="POST">
             <textarea name="review_text" required></textarea>
             <input type="hidden" name="inv_id" value="<%= inv_id %>">
             <input type="hidden" name="account_id" value="<%= accountData.account_id %>">

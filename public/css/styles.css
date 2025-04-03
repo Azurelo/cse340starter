@@ -375,6 +375,99 @@ input:required:valid {
 #inventoryDisplay a:hover {
   text-decoration: underline;
 }
+
+/* Edit */
+.edit {
+  text-align: center;
+  margin: 0px auto;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.edit, .actions{
+  font-size: large;
+  font-family:'Times New Roman', Times, serif;
+}
+/* Remove default list styling */
+.edit ul {
+  list-style: none;
+  padding: 0;
+  width: 60%; 
+  margin: 0 auto;
+}
+
+/* Flexbox for row alignment */
+.edit li {
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+  gap: 10px; 
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+/* Review text takes up 50% */
+.edit p {
+  flex: 2; 
+  text-align: center;
+  margin: 0;
+  padding-right: 10px;
+}
+
+/* Container for buttons to take 25% */
+.edit .actions {
+  flex: 1; 
+  display: flex;
+  gap: 5px;
+}
+.action button{
+  text-align: center;
+  margin: 0px auto;
+}
+/* Edit & Delete buttons */
+.edit a,
+.edit button {
+  padding: 8px 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 5px;
+  text-decoration: none;
+  text-align: center;
+  flex: 1; 
+}
+
+/* Edit button */
+.edit a {
+  background-color: #4CAF50; 
+  color: white;
+}
+
+.edit a:hover {
+  background-color: #45a049;
+}
+
+/* Delete button */
+.edit button {
+  background-color: pink; 
+  color: black;
+}
+
+.edit button:hover {
+  background-color: #d9534f;
+  color: white;
+}
+
+/* Ensuring form is inline */
+.edit form {
+  margin: 0;
+  display: inline;
+  border: none;
+}
+
+
+
 /* Media query for small screens (below 768px) */
 @media (max-width: 768px) {
   .vehicle-detail {
@@ -397,7 +490,7 @@ input:required:valid {
   }
 
   .vehicle-detail img {
-    max-width: 90%; /* Limit image width */
+    max-width: 90%; 
     margin: 0 auto;
   }
 

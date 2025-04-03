@@ -13,21 +13,19 @@
   <h3>Inventory Management</h3>
   <p><a href="/inv">Go to Inventory Management</a></p>
 <% } %>
-<!-- <p><%= accountData.account_id %></p> -->
 <h3>Account Management</h3>
-<!-- Link to update account information -->
 <a href="/account/update/<%= accountData.account_id %>">Update Account Information</a>
 
 <h3>Your Reviews</h3>
-
+<div class="edit">
 <% if (reviews && reviews.length > 0) { %>  
     <ul>
         <% reviews.forEach(review => { %>
             <li>
                 <p><%= review.review_text %></p>
                 <a href="/reviews/edit/<%= review.review_id %>">Edit</a>
-                <form action="/reviews/delete/<%= review.review_id %>" method="POST">
-                    <button type="submit">Delete</button>
+                <form class="actions" action="/reviews/delete/<%= review.review_id %>" method="POST">
+                    <button class="actions" type="submit">Delete</button>
                 </form>
             </li>
         <% }); %>
@@ -35,4 +33,5 @@
 <% } else { %>
     <p>No reviews yet.</p>
 <% } %>
+</div>
 

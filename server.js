@@ -84,7 +84,7 @@ app.get("/", baseController.buildHome);
 // Inventory routes
 app.use("/inv", inventoryRoute);
 app.use("/account", accountRoute);
-app.use("/review", reviewRoutes);
+app.use("/reviews", reviewRoutes);
 app.use(errorRoutes);
 
 /* ***********************

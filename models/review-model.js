@@ -3,7 +3,6 @@ const pool = require('../database/');
 // Add a new review
 async function addReview(reviewText, invId, accountId) {
     const sql = `INSERT INTO review (review_text, inv_id, account_id) VALUES ($1, $2, $3) RETURNING *`;
-    console.log('Executing SQL:', sql, [reviewText, invId, accountId]); 
     const result = await pool.query(sql, [reviewText, invId, accountId]);
     return result.rows[0];
 }
@@ -26,6 +25,14 @@ async function getReviewsByAccountId(accountId) {
     return result.rows;
 }
 
+//Get review by an id
+async function getReviewById(reviewId) {
+    const sql = `SELECT * FROM review WHERE review_id = $1`;
+    const result = await pool.query(sql, [reviewId]);
+    return result.rows[0];
+}
+
+
 // Update a review
 async function updateReview(reviewId, newText) {
     const sql = `UPDATE review SET review_text = $1 WHERE review_id = $2 RETURNING *`;
@@ -40,4 +47,4 @@ async function deleteReview(reviewId) {
     return result.rows[0];
 }
 
-module.exports = { addReview, getReviewsByInventoryId, getReviewsByAccountId, updateReview, deleteReview };
+module.exports = { addReview, getReviewById, getReviewsByInventoryId, getReviewsByAccountId, updateReview, deleteReview };
